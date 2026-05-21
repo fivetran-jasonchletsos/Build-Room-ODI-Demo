@@ -1,0 +1,305 @@
+@import "tailwindcss";
+
+/*
+ * The ODI Build Room — Fivetran corporate light theme.
+ *
+ * Paper white background, Fivetran near-black ink, Fivetran blue for primary
+ * accents, red reserved for urgency (the gap, the S&OP deadline, the missing
+ * metric), four sub-agent colors for the dbt-wizard sub-agents that build the
+ * new gold model live. Inter throughout. Engineering blueprint, not a NOC.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  color-scheme: light;
+
+  /* Core surfaces — paper-first */
+  --ink:           #ffffff;
+  --ink-deep:      #fafaf5;
+  --ink-elev:      #ffffff;
+  --ink-elev-2:    #f4f5f7;
+  --paper:         #ffffff;
+  --paper-deep:    #fafaf5;
+  --paper-code:    #fbfbf4;
+
+  /* Hairlines */
+  --line:          #e7eaee;
+  --line-bright:   #cfd4dc;
+  --line-soft:     #eef0f3;
+
+  /* Type — Fivetran near-black + slate muted */
+  --text:          #0F1419;
+  --text-muted:    #5b6770;
+  --text-soft:     #8a93a0;
+  --text-dim:      #aeb6c0;
+
+  /* Signal palette — red for urgency, green for resolved */
+  --crisis:        #DC2626;
+  --crisis-bright: #DC2626;
+  --crisis-glow:   rgba(220, 38, 38, 0.18);
+  --alert:         #b45309;
+  --alert-bright:  #b45309;
+  --alert-glow:    rgba(180, 83, 9, 0.18);
+  --resolved:      #15803d;
+  --resolved-bright: #15803d;
+  --resolved-glow: rgba(21, 128, 61, 0.18);
+  --system:        #0073EA;
+  --system-bright: #0073EA;
+  --system-glow:   rgba(0, 115, 234, 0.18);
+
+  /* Sub-agent colors — dbt-wizard quartet */
+  --agent-explorer:     #0073EA;   /* Fivetran blue */
+  --agent-summary:      #b45309;   /* warm amber */
+  --agent-worker:       #be185d;   /* deep magenta */
+  --agent-verification: #15803d;   /* forest green */
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============= TYPE SYSTEM ============= */
+.font-display {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.font-mono {
+  font-family: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, monospace;
+}
+.eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+:focus-visible {
+  outline: 2px solid rgba(0, 115, 234, 0.5);
+  outline-offset: 3px;
+}
+
+/* ============= LAYOUT PRIMITIVES ============= */
+.panel {
+  background: var(--ink-elev);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.panel-deep {
+  background: var(--ink-deep);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.hairline {
+  border-color: var(--line);
+}
+
+/* ============= SIGNAL CHIPS ============= */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+}
+.chip-crisis    { color: var(--crisis);   background: rgba(220, 38, 38, 0.08); }
+.chip-alert     { color: var(--alert);    background: rgba(180, 83, 9, 0.08); }
+.chip-resolved  { color: var(--resolved); background: rgba(21, 128, 61, 0.08); }
+.chip-system    { color: var(--system);   background: rgba(0, 115, 234, 0.08); }
+
+/* ============= GLOW + PULSE ============= */
+.glow-crisis    { box-shadow: 0 0 0 1px var(--crisis), 0 8px 24px var(--crisis-glow); }
+.glow-alert     { box-shadow: 0 0 0 1px var(--alert),  0 8px 24px var(--alert-glow); }
+.glow-resolved  { box-shadow: 0 0 0 1px var(--resolved), 0 8px 24px var(--resolved-glow); }
+.glow-system    { box-shadow: 0 0 0 1px var(--system), 0 8px 24px var(--system-glow); }
+
+@keyframes signal-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+.pulse-dot {
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  border-radius: 999px;
+  animation: signal-pulse 1.6s ease-in-out infinite;
+}
+
+/* ============= AGENT AVATAR ============= */
+.agent-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--text);
+  transition: all 200ms ease;
+}
+.agent-avatar.active {
+  border-color: currentColor;
+  box-shadow: 0 0 0 2px currentColor, 0 0 0 4px rgba(15, 20, 25, 0.04);
+}
+
+/* ============= CHAT THREAD ============= */
+.chat-row {
+  position: relative;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.chat-bubble {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.chat-cursor::after {
+  content: '▌';
+  display: inline-block;
+  margin-left: 2px;
+  color: currentColor;
+  animation: cursor-blink 0.9s steps(2, start) infinite;
+}
+@keyframes cursor-blink {
+  to { visibility: hidden; }
+}
+
+/* ============= CODE PANEL ============= */
+.code-panel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  background: var(--paper-code);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  white-space: pre;
+  tab-size: 2;
+}
+.code-cursor::after {
+  content: '▌';
+  color: var(--system);
+  animation: cursor-blink 0.9s steps(2, start) infinite;
+}
+.tok-kw    { color: #0058B0; font-weight: 600; }
+.tok-fn    { color: #0058B0; }
+.tok-str   { color: #15803d; }
+.tok-com   { color: #64748b; font-style: italic; }
+.tok-num   { color: #b45309; }
+.tok-jinja { color: #be185d; font-weight: 600; }
+.tok-tbl   { color: #0F1419; font-weight: 600; }
+
+/* ============= BUTTONS ============= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  border-radius: 6px;
+  border: 1px solid var(--text);
+  background: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+.btn:hover {
+  background: var(--text);
+  color: #ffffff;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-crisis {
+  background: var(--crisis);
+  border-color: var(--crisis);
+  color: #ffffff;
+}
+.btn-crisis:hover {
+  background: #B91C1C;
+  border-color: #B91C1C;
+  color: #ffffff;
+  box-shadow: 0 8px 20px var(--crisis-glow);
+}
+.btn-resolved {
+  background: var(--resolved);
+  border-color: var(--resolved);
+  color: #ffffff;
+}
+.btn-resolved:hover {
+  background: #166534;
+  border-color: #166534;
+  color: #ffffff;
+  box-shadow: 0 8px 20px var(--resolved-glow);
+}
+.btn-primary {
+  background: var(--system);
+  border-color: var(--system);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background: #0058B0;
+  border-color: #0058B0;
+  color: #ffffff;
+  box-shadow: 0 8px 20px var(--system-glow);
+}
+
+/* ============= BACKGROUNDS ============= */
+.grid-overlay {
+  background-image:
+    radial-gradient(circle, rgba(0, 115, 234, 0.10) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ============= LINKS / NAV ============= */
+.nav-link {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: color 150ms ease, background 150ms ease;
+}
+.nav-link:hover { color: var(--text); background: rgba(0, 115, 234, 0.06); }
+.nav-link.active { color: var(--system); background: rgba(0, 115, 234, 0.10); }
+
+/* ============= FORM RESETS ============= */
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+* { box-sizing: border-box; }

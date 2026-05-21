@@ -1,0 +1,11 @@
+{
+  "connectors": [
+    { "name": "Walmart Retail Link",      "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 4200000, "destination": "bronze.retail_link" },
+    { "name": "Amazon Vendor Central",    "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 1800000, "destination": "bronze.amazon_vc" },
+    { "name": "Target Partners Online",   "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 1400000, "destination": "bronze.target_pol" },
+    { "name": "Kroger Vendor Portal",     "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 1100000, "destination": "bronze.kroger_vp" },
+    { "name": "Manhattan WMS",            "type": "Replenishment",       "owner": "Cardinal Provisions", "freq": "15-min", "rows_per_day": 920000,  "destination": "bronze.manhattan" },
+    { "name": "Trade-Promo Calendar",     "type": "Promo SoR",           "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 12400,   "destination": "bronze.promo" },
+    { "name": "Store Master (SAP HRP)",   "type": "Reference master",    "owner": "Cardinal Provisions", "freq": "daily",  "rows_per_day": 18200,   "destination": "bronze.store_master" }
+  ]
+}

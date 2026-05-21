@@ -1,0 +1,46 @@
+{
+  "company": "Cardinal Provisions",
+  "request_id": "BLD-2026-05-21-0007",
+  "requested_by": "Maya Holbrook, CSCO",
+  "requested_at": "2026-05-21T16:14:00-05:00",
+  "timezone_label": "Thursday 16:14 CST",
+  "question": "I want to track phantom OOS by store cluster — clustered by region and promotion overlap — over the last 90 days. Show me which clusters are chronic offenders.",
+  "metric_label": "Phantom OOS rate by store cluster",
+  "metric_code": "gold.phantom_oos_by_cluster",
+  "sop_meeting_at": "2026-05-22T06:30:00-05:00",
+  "sop_meeting_label": "Friday 06:30 CST · S&OP Weekly",
+  "target_schema": "gold",
+  "target_model": "phantom_oos_by_cluster",
+  "target_grain": "one row per (region, promotion_overlap_bucket) over the trailing 90 days",
+  "prior_crisis_id": "INC-2026-05-21-0042",
+  "retailer": "MegaMart",
+  "dma": "Atlanta",
+  "upstream_models": [
+    {
+      "model": "stg_retailer_pos_hourly",
+      "layer": "staging",
+      "grain": "store · sku · event_date · hour",
+      "description": "Hourly POS from Walmart Retail Link, Amazon Vendor Central, Target Partners Online, Kroger Vendor Portal. Unit velocity and unit_velocity_pct_change."
+    },
+    {
+      "model": "int_shelf_compliance_daily",
+      "layer": "intermediate",
+      "grain": "store · sku · event_date",
+      "description": "Daily shelf-compliance signal — joins Retail Link planogram against Manhattan WMS replenishment. Yields shelf_should_have_stock boolean."
+    },
+    {
+      "model": "stg_promotion_calendar",
+      "layer": "staging",
+      "grain": "promo_id · store · event_date",
+      "description": "Trade-promo calendar from the promo system of record. promo_status ACTIVE / PLANNED / EXPIRED. Joined back to store and date."
+    },
+    {
+      "model": "dim_store_cluster",
+      "layer": "marts/dim",
+      "grain": "store · cluster_key (SCD-2)",
+      "description": "Store master with current cluster assignment — region, market, banner. Slowly changing dim."
+    }
+  ],
+  "manual_time_days": "3 to 5 days",
+  "build_room_seconds": 87
+}

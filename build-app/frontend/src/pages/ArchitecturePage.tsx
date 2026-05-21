@@ -1,0 +1,185 @@
+import { useEffect, useState } from 'react';
+import { dataUrl } from '../types';
+
+interface IcebergTable { name: string; rows: number; partition: string; owner: string }
+interface PipelineConnector { name: string; type: string; owner: string; freq: string; rows_per_day: number; destination: string }
+
+export default function ArchitecturePage() {
+  const [tables, setTables] = useState<IcebergTable[]>([]);
+  const [connectors, setConnectors] = useState<PipelineConnector[]>([]);
+
+  useEffect(() => {
+    fetch(dataUrl('iceberg.json')).then(r => r.json()).then(d => setTables(d.gold_tables));
+    fetch(dataUrl('pipeline.json')).then(r => r.json()).then(d => setConnectors(d.connectors));
+  }, []);
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <header className="mb-10">
+        <div className="eyebrow mb-1">ODI Reference Architecture · Cardinal Provisions</div>
+        <h1 className="font-display text-4xl sm:text-5xl tracking-tight" style={{ color: 'var(--text)' }}>
+          Build-time AI and run-time AI on the same lake.
+        </h1>
+        <p className="mt-3 max-w-3xl leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          The same Iceberg files that dbt builds are the ones Snowflake reads and the ones every Cortex agent
+          queries. dbt-wizard sits inside dbt Labs and authors new models into the same medallion. No copies.
+          No exports. No drift.
+        </p>
+      </header>
+
+      <section className="panel-deep p-6 mb-12 relative overflow-hidden">
+        <div className="absolute inset-0 grid-overlay opacity-20 pointer-events-none" />
+        <div className="relative grid grid-cols-1 lg:grid-cols-6 gap-4 items-stretch">
+          <div className="lg:col-span-1">
+            <div className="eyebrow mb-3">Source systems</div>
+            <div className="space-y-2">
+              {SOURCES.map(s => (
+                <div key={s} className="panel px-3 py-2 text-xs font-mono" style={{ color: 'var(--text)' }}>
+                  {s}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Arrow />
+
+          <div className="lg:col-span-1">
+            <div className="eyebrow mb-3">Ingest</div>
+            <div className="panel p-3" style={{ borderLeft: '4px solid var(--system)' }}>
+              <div className="font-display text-lg" style={{ color: 'var(--system)' }}>Fivetran</div>
+              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>750+ connectors · MDLS</div>
+              <div className="text-xs font-mono mt-2" style={{ color: 'var(--text-soft)' }}>writes to S3 bucket</div>
+            </div>
+          </div>
+
+          <Arrow />
+
+          <div className="lg:col-span-1">
+            <div className="eyebrow mb-3">Lake + Transform</div>
+            <div className="space-y-2">
+              <div className="panel p-3">
+                <div className="font-display text-lg" style={{ color: 'var(--text)' }}>Iceberg on S3</div>
+                <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>cardinal-odi-lake</div>
+              </div>
+              <div className="panel p-3" style={{ borderLeft: '4px solid var(--alert)' }}>
+                <div className="font-display text-lg" style={{ color: 'var(--alert)' }}>dbt Labs</div>
+                <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>medallion · 88 models</div>
+              </div>
+              <div className="panel p-3" style={{ borderLeft: '4px solid var(--system)' }}>
+                <div className="font-display text-base" style={{ color: 'var(--system)' }}>dbt-wizard</div>
+                <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>build-time sub-agents</div>
+              </div>
+            </div>
+          </div>
+
+          <Arrow />
+
+          <div className="lg:col-span-1">
+            <div className="eyebrow mb-3">Compute</div>
+            <div className="panel p-3">
+              <div className="font-display text-lg" style={{ color: 'var(--text)' }}>Snowflake</div>
+              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>reads Iceberg directly</div>
+              <div className="text-xs font-mono mt-2" style={{ color: 'var(--text-soft)' }}>runs dbt_show + materialize</div>
+            </div>
+          </div>
+
+          <Arrow />
+
+          <div className="lg:col-span-1">
+            <div className="eyebrow mb-3">Run-time agents</div>
+            <div className="space-y-2">
+              {AGENT_BOXES.map(a => (
+                <div key={a.name} className="panel p-3" style={{ borderLeft: `4px solid ${a.color}` }}>
+                  <div className="font-display text-sm" style={{ color: a.color }}>{a.name}</div>
+                  <div className="text-[10px] font-mono mt-1" style={{ color: 'var(--text-muted)' }}>{a.tables}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-12 panel p-6" style={{ borderLeft: '5px solid var(--system)', background: 'var(--paper-deep)' }}>
+        <div className="eyebrow mb-2" style={{ color: 'var(--system)' }}>The build-time / run-time loop</div>
+        <p className="text-base sm:text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
+          <strong>dbt-wizard</strong> is the build-time companion to Snowflake's Cortex. Cortex acts on what
+          dbt-wizard authors. dbt-wizard authors what Cortex will need next. Both point at the same Iceberg
+          lake. Both run governed against the same medallion. Neither is locked to the other. When the CSCO
+          asks a question that requires a new model, dbt-wizard builds it in eighty-seven seconds —
+          materialized to the same gold prefix Cortex reads from a minute later.
+        </p>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="font-display text-2xl mb-4 border-b pb-2" style={{ color: 'var(--text)', borderColor: 'var(--line)' }}>Fivetran connectors</h2>
+        <div className="panel overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ background: 'var(--paper-deep)' }}>
+                {['Source', 'Type', 'Cadence', 'Rows / day', 'Destination'].map(h => (
+                  <th key={h} className="text-left px-4 py-2 eyebrow border-b" style={{ borderColor: 'var(--line)' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {connectors.map(c => (
+                <tr key={c.name} style={{ borderBottom: '1px solid var(--line-soft)' }}>
+                  <td className="px-4 py-3 font-semibold" style={{ color: 'var(--text)' }}>{c.name}</td>
+                  <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>{c.type}</td>
+                  <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>{c.freq}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-right tabular-nums" style={{ color: 'var(--text)' }}>{c.rows_per_day.toLocaleString()}</td>
+                  <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>{c.destination}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="font-display text-2xl mb-4 border-b pb-2" style={{ color: 'var(--text)', borderColor: 'var(--line)' }}>Gold-layer Iceberg tables</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {tables.map(t => {
+            const isNew = t.owner.startsWith('BUILT BY');
+            return (
+              <div key={t.name} className="panel p-4" style={isNew ? { borderLeft: '4px solid var(--system)', background: 'rgba(0,115,234,0.04)' } : undefined}>
+                <div className="font-mono text-sm font-semibold" style={{ color: isNew ? 'var(--system)' : 'var(--text)' }}>{t.name}</div>
+                <div className="text-xs font-mono mt-1" style={{ color: 'var(--text-muted)' }}>
+                  {t.rows.toLocaleString()} rows · part by {t.partition}
+                </div>
+                <div className="text-[11px] mt-2" style={{ color: isNew ? 'var(--system)' : 'var(--text-soft)' }}>Read by: {t.owner}</div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function Arrow() {
+  return (
+    <div className="hidden lg:flex items-center justify-center">
+      <svg viewBox="0 0 40 24" className="h-6 w-10" fill="none" stroke="var(--text-soft)" strokeWidth="1.5" strokeLinecap="round">
+        <path d="M2 12 L34 12 M28 6 L34 12 L28 18" />
+      </svg>
+    </div>
+  );
+}
+
+const SOURCES = [
+  'Walmart Retail Link',
+  'Amazon Vendor Central',
+  'Target Partners Online',
+  'Kroger Vendor Portal',
+  'Manhattan WMS',
+  'Trade-Promo SoR',
+  'SAP store master',
+];
+
+const AGENT_BOXES = [
+  { name: 'Demand-Sensing',  color: '#0073EA', tables: 'pos_hourly · phantom_oos_by_cluster' },
+  { name: 'Procurement',     color: '#b45309', tables: 'plant_inventory · dc_inventory' },
+  { name: 'Trade-Promo',     color: '#be185d', tables: 'promo_calendar · phantom_oos_by_cluster' },
+  { name: 'Transportation',  color: '#15803d', tables: 'carrier_otd · lane_rates' },
+];

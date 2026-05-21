@@ -1,0 +1,90 @@
+{
+  "before": {
+    "nodes": [
+      { "id": "pos",     "name": "stg_retailer_pos_hourly",  "layer": "staging" },
+      { "id": "shelf",   "name": "int_shelf_compliance_daily", "layer": "intermediate" },
+      { "id": "promo",   "name": "stg_promotion_calendar",   "layer": "staging" },
+      { "id": "cluster", "name": "dim_store_cluster",        "layer": "marts/dim" },
+      { "id": "gap",     "name": "gold.phantom_oos_by_cluster", "layer": "gap", "built": false }
+    ],
+    "edges": [
+      { "from": "pos",     "to": "gap" },
+      { "from": "shelf",   "to": "gap" },
+      { "from": "promo",   "to": "gap" },
+      { "from": "cluster", "to": "gap" }
+    ]
+  },
+  "after": {
+    "nodes": [
+      { "id": "pos",     "name": "stg_retailer_pos_hourly",  "layer": "staging" },
+      { "id": "shelf",   "name": "int_shelf_compliance_daily", "layer": "intermediate" },
+      { "id": "promo",   "name": "stg_promotion_calendar",   "layer": "staging" },
+      { "id": "cluster", "name": "dim_store_cluster",        "layer": "marts/dim" },
+      { "id": "gold",    "name": "gold.phantom_oos_by_cluster", "layer": "gold", "built": true, "new": true },
+      { "id": "ds_agent", "name": "Demand-Sensing Cortex Agent",  "layer": "consumer" },
+      { "id": "pr_agent", "name": "Trade-Promo Cortex Agent",      "layer": "consumer" }
+    ],
+    "edges": [
+      { "from": "pos",     "to": "gold" },
+      { "from": "shelf",   "to": "gold" },
+      { "from": "promo",   "to": "gold" },
+      { "from": "cluster", "to": "gold" },
+      { "from": "gold",    "to": "ds_agent" },
+      { "from": "gold",    "to": "pr_agent" }
+    ]
+  },
+  "without_wizard": {
+    "label": "Without dbt-wizard",
+    "summary": "Question added to the analytics backlog. CSCO walks into S&OP without the cluster view.",
+    "metrics": [
+      { "label": "Time to model",       "value": "3 to 5 days" },
+      { "label": "Engineer hours",       "value": "8 to 14h" },
+      { "label": "Tests written",        "value": "ad-hoc" },
+      { "label": "Lineage entries",      "value": "manual" },
+      { "label": "Documentation",         "value": "PR-time only" },
+      { "label": "S&OP meeting status",   "value": "no answer" }
+    ],
+    "narrative": [
+      "CSCO files the request. It enters the analytics backlog at priority B.",
+      "Data engineer scopes the work Friday morning — too late for S&OP.",
+      "Engineer writes SQL from scratch, joining four upstream models by hand.",
+      "Tests, YAML, and contract get bolted on at PR time. Sometimes.",
+      "Cortex agents do not see the new asset until the next release cut."
+    ]
+  },
+  "with_wizard": {
+    "label": "With dbt-wizard",
+    "summary": "Four sub-agents surface the upstreams, author the SQL, write the tests, and materialize the asset in 87 seconds.",
+    "metrics": [
+      { "label": "Time to model",       "value": "87 seconds" },
+      { "label": "Engineer hours",       "value": "0.0h authored" },
+      { "label": "Tests written",        "value": "6 column + 1 combination" },
+      { "label": "Lineage entries",      "value": "auto, 4 upstream" },
+      { "label": "Documentation",         "value": "in YAML on materialize" },
+      { "label": "S&OP meeting status",   "value": "answer in hand" }
+    ],
+    "narrative": [
+      "Explorer runs status and search. Returns the four upstream candidates.",
+      "Summary runs describe and lineage. Confirms the join path and names the new grain.",
+      "Worker runs dbt_show on a 7-day slice. Validates the proposed grain.",
+      "Worker authors gold.phantom_oos_by_cluster.sql with CTEs and the final SELECT.",
+      "Verification writes the YAML — description, schema contract, tests, ownership.",
+      "Worker materializes the table to Iceberg. Verification confirms downstream lineage."
+    ]
+  },
+  "governance": [
+    { "label": "Tests written",            "value": "6 column-level + 1 combination" },
+    { "label": "Schema contract",           "value": "enforced on materialize" },
+    { "label": "Lineage upstreams",          "value": "4 declared, 4 validated" },
+    { "label": "Documentation",              "value": "auto-written in YAML" },
+    { "label": "Ownership",                  "value": "supply_chain_analytics" },
+    { "label": "Tag",                         "value": "ai_built" },
+    { "label": "Iceberg table format",        "value": "v2 · Parquet · ZSTD" },
+    { "label": "Open Catalog registration",   "value": "complete" }
+  ],
+  "hero": {
+    "label": "Production-grade dbt model in production-grade time",
+    "value": "87 seconds",
+    "note": "From CSCO question to materialized Iceberg gold table — versioned, tested, documented, lineage-tracked, ready for the next Cortex pass."
+  }
+}

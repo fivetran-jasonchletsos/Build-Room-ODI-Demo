@@ -1,0 +1,124 @@
+{
+  "events": [
+    {
+      "from": "explorer",
+      "step": 1,
+      "step_label": "Discovery",
+      "body": "Running status against the dbt project. Project parses clean — 87 models, 280 tests, last refresh 04:00 CST.",
+      "side_effect": "tool:status returned ok · 87 models · 280 tests"
+    },
+    {
+      "from": "explorer",
+      "step": 1,
+      "step_label": "Discovery",
+      "body": "Running search against the project for 'phantom out-of-stock', 'store cluster', 'promotion overlap', 'shelf compliance'. Four upstream models surface.",
+      "side_effect": "tool:search matched stg_retailer_pos_hourly, int_shelf_compliance_daily, stg_promotion_calendar, dim_store_cluster"
+    },
+    {
+      "from": "summary",
+      "step": 2,
+      "step_label": "Schema Understanding",
+      "body": "Running describe on each candidate. POS is hourly grain on store · sku · event_date. Shelf compliance rolls to daily. Promo calendar is keyed on promo · store · date. Store cluster dim is SCD-2.",
+      "side_effect": "tool:describe returned grain=hourly+store+sku, grain=daily+store+sku, grain=promo+store+date, grain=store+cluster_key"
+    },
+    {
+      "from": "summary",
+      "step": 2,
+      "step_label": "Schema Understanding",
+      "body": "Running lineage. Join path is clean: POS and shelf compliance both key on store · sku · event_date. Cluster dim attaches via store_id. Promo attaches via store_id and event_date. Gap is at the aggregation layer — no model rolls phantom-OOS counts to (region, promotion_overlap_bucket).",
+      "side_effect": "tool:lineage validated join path · gap confirmed at aggregation grain"
+    },
+    {
+      "from": "worker",
+      "step": 3,
+      "step_label": "Data Inspection",
+      "body": "Spinning up a small warehouse and running dbt_show on a 7-day slice across MegaMart Atlanta DMA. Phantom-OOS signal at store · sku · day fires on 4.2 percent of slot-days. Cluster aggregation looks viable.",
+      "side_effect": "tool:warehouse start XS · tool:dbt_show 7-day slice · 4.2% slot-day phantom rate"
+    },
+    {
+      "from": "worker",
+      "step": 4,
+      "step_label": "Model Creation",
+      "body": "Authoring models/gold/phantom_oos_by_cluster.sql. Writing the config block first — table materialization, gold schema, tags supply_chain and ai_built.",
+      "code_target": "sql",
+      "code_append": "{{ config(materialized='table', schema='gold', tags=['supply_chain', 'ai_built']) }}\n\n"
+    },
+    {
+      "from": "worker",
+      "step": 4,
+      "step_label": "Model Creation",
+      "body": "Writing the header docblock so downstream readers know what this model is and who built it.",
+      "code_target": "sql",
+      "code_append": "-- gold.phantom_oos_by_cluster\n-- Phantom out-of-stock detection rolled up to store cluster\n-- Cluster = (region, promotion_overlap_bucket)\n-- Built live by dbt-wizard sub-agents in response to CSCO Q3 S&OP prep\n-- Sources: stg_retailer_pos_hourly + int_shelf_compliance_daily +\n--          stg_promotion_calendar + dim_store_cluster\n\n"
+    },
+    {
+      "from": "worker",
+      "step": 4,
+      "step_label": "Model Creation",
+      "body": "Anchoring the POS CTE on the trailing 90-day window — that is the exact horizon the CSCO asked for.",
+      "code_target": "sql",
+      "code_append": "with pos as (\n    select * from {{ ref('stg_retailer_pos_hourly') }}\n    where event_date >= dateadd('day', -90, current_date())\n),\n\n"
+    },
+    {
+      "from": "worker",
+      "step": 4,
+      "step_label": "Model Creation",
+      "body": "Pulling shelf compliance, cluster master, and active promo into their own CTEs. Promo filters to ACTIVE only so we get a clean overlap signal.",
+      "code_target": "sql",
+      "code_append": "shelf as (\n    select * from {{ ref('int_shelf_compliance_daily') }}\n),\n\ncluster as (\n    select * from {{ ref('dim_store_cluster') }}\n),\n\npromo as (\n    select * from {{ ref('stg_promotion_calendar') }}\n    where promo_status = 'ACTIVE'\n),\n\n"
+    },
+    {
+      "from": "worker",
+      "step": 4,
+      "step_label": "Model Creation",
+      "body": "Deriving the phantom-OOS boolean. Shelf says product should be on shelf AND POS velocity collapsed at least 50 percent — that is a phantom out-of-stock.",
+      "code_target": "sql",
+      "code_append": "phantom_signal as (\n    select\n        s.store_id,\n        s.sku_id,\n        s.event_date,\n        case\n            when s.shelf_should_have_stock = true\n             and p.unit_velocity_pct_change <= -0.5\n            then 1\n            else 0\n        end as is_phantom_oos\n    from shelf s\n    left join pos p\n        on  p.store_id = s.store_id\n        and p.sku_id = s.sku_id\n        and p.event_date = s.event_date\n)\n\n"
+    },
+    {
+      "from": "worker",
+      "step": 4,
+      "step_label": "Model Creation",
+      "body": "Final SELECT — one row per (region, promotion_overlap_bucket). Stores affected, event count, rate, and last-fired timestamp. Ordered by rate so the chronic offenders sit at the top of the table.",
+      "code_target": "sql",
+      "code_append": "select\n    c.region,\n    case\n        when pr.promo_id is not null then 'ON_PROMO'\n        else 'NO_PROMO'\n    end as promotion_overlap_bucket,\n    count(distinct ps.store_id) as stores_affected_90d,\n    sum(ps.is_phantom_oos) as phantom_oos_events_90d,\n    sum(ps.is_phantom_oos) / nullif(count(*), 0) as phantom_oos_rate,\n    max(ps.event_date) as last_phantom_oos_at\nfrom phantom_signal ps\njoin cluster c on c.store_id = ps.store_id\nleft join promo pr on pr.store_id = ps.store_id and pr.event_date = ps.event_date\nwhere ps.is_phantom_oos = 1\ngroup by 1, 2\norder by phantom_oos_rate desc\n"
+    },
+    {
+      "from": "verification",
+      "step": 5,
+      "step_label": "Test Authoring",
+      "body": "Writing the YAML companion. Description first, then the schema contract — every column gets a type so downstream Cortex agents can resolve it without ambiguity.",
+      "code_target": "yaml",
+      "code_append": "version: 2\n\nmodels:\n  - name: phantom_oos_by_cluster\n    description: |\n      Phantom out-of-stock counts and rates rolled up to (region,\n      promotion_overlap_bucket) over the trailing 90 days. Built by\n      dbt-wizard sub-agents on 2026-05-21 in response to CSCO S&OP prep.\n    config:\n      contract:\n        enforced: true\n      tags: [supply_chain, ai_built]\n      meta:\n        owner: supply_chain_analytics\n        built_by: dbt-wizard\n        consumes: [stg_retailer_pos_hourly, int_shelf_compliance_daily, stg_promotion_calendar, dim_store_cluster]\n\n"
+    },
+    {
+      "from": "verification",
+      "step": 5,
+      "step_label": "Test Authoring",
+      "body": "Adding the column-level tests. Uniqueness on the cluster key (region, promotion_overlap_bucket). Not-null on the rate. Accepted-values on the bucket so nothing drifts.",
+      "code_target": "yaml",
+      "code_append": "    columns:\n      - name: region\n        data_type: varchar\n        tests:\n          - not_null\n      - name: promotion_overlap_bucket\n        data_type: varchar\n        tests:\n          - not_null\n          - accepted_values:\n              values: ['ON_PROMO', 'NO_PROMO']\n      - name: stores_affected_90d\n        data_type: number\n        tests:\n          - not_null\n      - name: phantom_oos_events_90d\n        data_type: number\n      - name: phantom_oos_rate\n        data_type: number\n        tests:\n          - not_null\n      - name: last_phantom_oos_at\n        data_type: date\n\n    tests:\n      - dbt_utils.unique_combination_of_columns:\n          combination_of_columns: [region, promotion_overlap_bucket]\n"
+    },
+    {
+      "from": "verification",
+      "step": 5,
+      "step_label": "Test Authoring",
+      "body": "Running dbt_show on the compiled model against the same 7-day slice Worker used. Tests resolve clean. Schema contract enforces.",
+      "side_effect": "tool:dbt_show compiled · tests:passed · contract:enforced"
+    },
+    {
+      "from": "worker",
+      "step": 6,
+      "step_label": "Materialization",
+      "body": "Materializing gold.phantom_oos_by_cluster to Iceberg on S3 via the Snowflake dbt adapter. Writing manifest, snapshotting, registering with the Open Catalog.",
+      "side_effect": "tool:dbt_run materialized 1 model · 18 rows · 0.42 GB · 12.6s"
+    },
+    {
+      "from": "verification",
+      "step": 6,
+      "step_label": "Materialization",
+      "body": "Running lineage one more time. Four upstreams attached. Cortex agents in the Crisis Room can now resolve the new gold table on their next pass. The S&OP question has an asset behind it.",
+      "side_effect": "tool:lineage updated · downstream:cortex_agents notified · 87 models → 88 models"
+    }
+  ]
+}

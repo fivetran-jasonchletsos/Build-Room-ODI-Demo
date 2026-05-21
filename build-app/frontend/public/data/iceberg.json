@@ -1,0 +1,13 @@
+{
+  "gold_tables": [
+    { "name": "gold.retailer_pos_hourly",      "rows": 152400000, "partition": "event_date", "owner": "Demand-Sensing Agent" },
+    { "name": "gold.shelf_compliance_daily",   "rows": 18900000,  "partition": "event_date", "owner": "Demand-Sensing Agent" },
+    { "name": "gold.plant_inventory",          "rows": 4200000,   "partition": "snapshot_date", "owner": "Procurement Agent" },
+    { "name": "gold.dc_inventory",             "rows": 7400000,   "partition": "snapshot_date", "owner": "Procurement Agent" },
+    { "name": "gold.promo_calendar",           "rows": 142000,    "partition": "promo_start_date", "owner": "Trade-Promo Agent" },
+    { "name": "gold.carrier_otd",              "rows": 980000,    "partition": "delivery_date", "owner": "Transportation Agent" },
+    { "name": "gold.lane_rates",               "rows": 184000,    "partition": "effective_date", "owner": "Transportation Agent" },
+    { "name": "gold.dim_store_cluster",        "rows": 18200,     "partition": "valid_from",    "owner": "shared dim" },
+    { "name": "gold.phantom_oos_by_cluster",   "rows": 18,        "partition": "region",        "owner": "BUILT BY dbt-wizard · 2026-05-21" }
+  ]
+}
