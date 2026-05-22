@@ -26,10 +26,10 @@ export default function HomePage() {
 
   return (
     <div className="relative">
-      <section className="relative overflow-hidden" style={{ background: '#ffffff', borderBottom: '1px solid var(--line)' }}>
+      <section className="relative overflow-hidden hero-glow" style={{ background: 'var(--surface-0)', borderBottom: '1px solid var(--line)' }}>
         <div className="absolute inset-0 grid-overlay opacity-60 pointer-events-none" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <div className="flex items-center gap-3 mb-6 flex-wrap">
+          <div className="flex items-center gap-3 mb-6 flex-wrap animate-in">
             <span className="chip chip-system">
               <span className="pulse-dot" style={{ background: 'var(--system)' }} />
               Build Active
@@ -41,18 +41,18 @@ export default function HomePage() {
             <span className="eyebrow">Request BLD-2026-05-21-0007</span>
           </div>
 
-          <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl tracking-tight leading-[0.95]" style={{ color: 'var(--text)' }}>
+          <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl leading-[0.95] animate-in animate-in-d1" style={{ color: 'var(--text)' }}>
             Sixty seconds.<br />
             <span style={{ color: 'var(--system)' }}>One new gold table.</span><br />
             Production-ready.
           </h1>
-          <p className="mt-6 max-w-3xl text-lg sm:text-xl leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          <p className="mt-6 max-w-3xl text-lg sm:text-xl leading-relaxed animate-in animate-in-d2" style={{ color: 'var(--text-muted)' }}>
             Four dbt-wizard sub-agents build a new dbt model live on the open Iceberg lake — versioned,
             tested, materialized. The Crisis Room next door already resolved the phantom out-of-stock.
             The CSCO has a follow-up question, and there is no gold table for it yet.
           </p>
 
-          <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3 animate-in animate-in-d3">
             {KPIS(tMinus).map(k => (
               <div key={k.label} className="panel p-5 relative overflow-hidden" style={{ borderLeft: `4px solid ${k.tone}` }}>
                 <div className="eyebrow mb-2">{k.label}</div>
@@ -62,7 +62,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <div className="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center animate-in animate-in-d4">
             <Link to="/scenario" className="btn btn-primary text-base px-6 py-4">
               Open the Build Room
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
@@ -100,7 +100,7 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="panel p-6 sm:p-8" style={{ borderLeft: '5px solid var(--system)', background: 'var(--paper-deep)' }}>
+        <div className="panel p-6 sm:p-8" style={{ borderLeft: '5px solid var(--system)', background: 'rgba(59,158,255,0.06)' }}>
           <div className="eyebrow mb-2" style={{ color: 'var(--system)' }}>The third apex demo</div>
           <p className="font-display text-2xl sm:text-3xl leading-tight" style={{ color: 'var(--text)' }}>
             The Crisis Room runs four Cortex agents on existing gold tables.<br />

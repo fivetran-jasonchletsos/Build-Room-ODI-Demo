@@ -23,7 +23,7 @@ export default function PolicyPage() {
         ))}
       </section>
 
-      <section className="panel-deep p-6 mb-10">
+      <section className="panel p-6 mb-10">
         <div className="eyebrow mb-3">The three pillars</div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {PILLARS.map(p => (
@@ -36,7 +36,7 @@ export default function PolicyPage() {
         </div>
       </section>
 
-      <section className="panel p-6 mb-10" style={{ borderLeft: '5px solid var(--system)', background: 'var(--paper-deep)' }}>
+      <section className="panel p-6 mb-10" style={{ borderLeft: '5px solid var(--system)', background: 'rgba(59,158,255,0.06)' }}>
         <div className="eyebrow mb-2" style={{ color: 'var(--system)' }}>The loop</div>
         <p className="text-lg leading-relaxed mb-4" style={{ color: 'var(--text)' }}>
           The new gold table is queryable by Snowflake's Cortex agents the moment it materializes — because

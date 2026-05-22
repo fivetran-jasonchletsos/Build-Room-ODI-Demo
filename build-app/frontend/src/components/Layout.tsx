@@ -42,8 +42,8 @@ export default function Layout() {
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
   return (
-    <div className="min-h-full flex flex-col" style={{ background: 'var(--ink)' }}>
-      <header className="sticky top-0 z-30" style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'saturate(180%) blur(10px)', WebkitBackdropFilter: 'saturate(180%) blur(10px)', borderBottom: '1px solid var(--line)' }}>
+    <div className="min-h-full flex flex-col" style={{ background: 'var(--surface-0)' }}>
+      <header className="sticky top-0 z-30" style={{ background: 'rgba(10,14,24,0.92)', backdropFilter: 'saturate(160%) blur(12px)', WebkitBackdropFilter: 'saturate(160%) blur(12px)', borderBottom: '1px solid var(--line)' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between gap-4">
             <Link to="/" className="flex items-center gap-3 shrink-0 min-w-0">
@@ -82,7 +82,7 @@ export default function Layout() {
                 onClick={() => setMobileOpen(o => !o)}
                 aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
                 className="lg:hidden h-9 w-9 inline-flex items-center justify-center rounded-sm"
-                style={{ color: 'var(--text-muted)', border: '1px solid var(--line)' }}
+                style={{ color: 'var(--text-soft)', border: '1px solid var(--line)' }}
               >
                 <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
                   {mobileOpen ? <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" /> : <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />}
@@ -114,7 +114,7 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <footer className="mt-16" style={{ background: 'var(--paper-deep)', borderTop: '1px solid var(--line)' }}>
+      <footer className="mt-16" style={{ background: 'var(--surface-0)', borderTop: '1px solid var(--line)' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
           <div>
             <div className="flex items-center gap-2 mb-3">
@@ -191,7 +191,7 @@ function DemoSwitcher() {
         </svg>
       </button>
       {open && (
-        <div role="menu" className="absolute right-0 top-full mt-2 w-[300px] rounded-sm shadow-xl z-40 overflow-hidden" style={{ background: 'var(--ink-elev)', border: '1px solid var(--line)' }}>
+        <div role="menu" className="absolute right-0 top-full mt-2 w-[300px] rounded-sm shadow-xl z-40 overflow-hidden" style={{ background: 'var(--surface-2)', border: '1px solid var(--line-bright)' }}>
           <div className="px-3 pt-3 pb-2 eyebrow border-b" style={{ borderColor: 'var(--line)' }}>
             ODI Demo Catalog
           </div>
@@ -216,7 +216,7 @@ function DemoSwitcher() {
                 <div key={d.key} className="opacity-70 cursor-default">{inner}</div>
               ) : (
                 <a key={d.key} href={d.url} className="block transition-colors" style={{ background: 'transparent' }} onClick={() => setOpen(false)}
-                   onMouseEnter={e => (e.currentTarget.style.background = 'var(--ink-elev-2)')}
+                   onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-3)')}
                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                   {inner}
                 </a>
@@ -232,11 +232,11 @@ function DemoSwitcher() {
 function BuildMark({ className = '' }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={className} aria-hidden>
-      <rect x="0.5" y="0.5" width="31" height="31" rx="6" fill="#ffffff" stroke="#0073EA" strokeWidth="1.5" />
-      <path d="M7 22 L7 10 L12 10 Q16 10 16 16 Q16 22 12 22 Z" fill="#0073EA" />
-      <circle cx="22" cy="11" r="2" fill="#be185d" />
-      <circle cx="22" cy="16" r="2" fill="#b45309" />
-      <circle cx="22" cy="21" r="2" fill="#15803d" />
+      <rect x="0.5" y="0.5" width="31" height="31" rx="4" fill="var(--surface-2)" stroke="var(--system)" strokeWidth="1.5" />
+      <path d="M7 22 L7 10 L12 10 Q16 10 16 16 Q16 22 12 22 Z" fill="var(--system)" />
+      <circle cx="22" cy="11" r="2" fill="var(--agent-worker)" />
+      <circle cx="22" cy="16" r="2" fill="var(--alert)" />
+      <circle cx="22" cy="21" r="2" fill="var(--resolved)" />
     </svg>
   );
 }

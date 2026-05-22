@@ -69,7 +69,7 @@ export default function OutcomePage() {
       </section>
 
       {/* Hero */}
-      <section className="panel p-8 mb-10" style={{ borderLeft: '5px solid var(--resolved)' }}>
+      <section className="panel p-8 mb-10" style={{ borderLeft: '5px solid var(--resolved)', background: 'rgba(34,197,94,0.06)' }}>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
           <div className="sm:col-span-1">
             <div className="eyebrow mb-2">Build Room result</div>
@@ -158,7 +158,7 @@ function LineagePanel({ title, subtitle, nodes, edges, tone }: { title: string; 
                     className="panel p-2.5"
                     style={{
                       borderLeft: `3px solid ${NODE_COLOR[layer] ?? '#0073EA'}`,
-                      background: isGap ? 'rgba(220,38,38,0.06)' : isNew ? 'rgba(21,128,61,0.06)' : '#ffffff',
+                      background: isGap ? 'rgba(240,77,77,0.08)' : isNew ? 'rgba(34,197,94,0.08)' : 'var(--surface-2)',
                       borderStyle: isGap ? 'dashed' : 'solid'
                     }}
                   >

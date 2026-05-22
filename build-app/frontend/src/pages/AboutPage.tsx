@@ -2,7 +2,7 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       {/* Canonical ODI Story block — verbatim pattern from FinServ */}
-      <section className="panel p-6 mb-10" style={{ borderLeft: '4px solid var(--system)' }}>
+      <section className="panel p-6 mb-10" style={{ borderLeft: '4px solid var(--system)', background: 'rgba(59,158,255,0.06)' }}>
         <div className="eyebrow mb-2" style={{ color: 'var(--system)' }}>The ODI Story</div>
         <h2 className="font-display text-3xl tracking-tight" style={{ color: 'var(--text)' }}>
           Data infrastructure for agents you trust.
@@ -92,7 +92,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="panel p-5" style={{ background: 'rgba(180, 83, 9, 0.04)', borderColor: 'rgba(180, 83, 9, 0.35)' }}>
+      <section className="panel p-5" style={{ background: 'rgba(245, 158, 11, 0.06)', borderColor: 'rgba(245, 158, 11, 0.35)' }}>
         <div className="eyebrow mb-2" style={{ color: 'var(--alert)' }}>Disclaimer</div>
         <p className="leading-relaxed text-sm" style={{ color: 'var(--text-muted)' }}>
           <strong style={{ color: 'var(--text)' }}>All data shown is synthetic.</strong>{' '}

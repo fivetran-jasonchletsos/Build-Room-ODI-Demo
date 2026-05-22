@@ -84,7 +84,7 @@ const PROPERTIES: Property[] = [
 export default function OdiDbtWizardPage() {
   return (
     <div className="relative">
-      <section className="relative overflow-hidden" style={{ background: '#ffffff', borderBottom: '1px solid var(--line)' }}>
+      <section className="relative overflow-hidden hero-glow" style={{ background: 'var(--surface-0)', borderBottom: '1px solid var(--line)' }}>
         <div className="absolute inset-0 grid-overlay opacity-50 pointer-events-none" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           <div className="flex items-center gap-3 mb-6">
@@ -104,7 +104,7 @@ export default function OdiDbtWizardPage() {
             lake. Both governed by the same medallion. That is the loop.
           </p>
 
-          <div className="mt-10 max-w-4xl panel p-6 sm:p-8" style={{ background: 'var(--paper-deep)' }}>
+          <div className="mt-10 max-w-4xl panel p-6 sm:p-8" style={{ background: 'var(--surface-1)' }}>
             <p className="text-base sm:text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
               When a stakeholder question outruns the gold layer, the answer is not "wait three days for the
               data engineering team." The answer is four sub-agents that run the same dbt tools an engineer
@@ -148,7 +148,7 @@ export default function OdiDbtWizardPage() {
         </div>
       </section>
 
-      <section style={{ background: 'var(--paper-deep)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
+      <section style={{ background: 'var(--surface-1)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
           <div className="eyebrow mb-2">Section 03 · The four properties</div>
           <h2 className="font-display text-3xl sm:text-5xl tracking-tight mb-3" style={{ color: 'var(--text)' }}>

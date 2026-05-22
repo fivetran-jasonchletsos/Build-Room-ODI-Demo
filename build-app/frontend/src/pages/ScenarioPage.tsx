@@ -44,7 +44,7 @@ export default function ScenarioPage() {
           The Crisis Room resolved phantom OOS at {s.retailer} {s.dma} DMA yesterday. The follow-up question
           arrives the next afternoon. There is no gold table behind it.
         </p>
-        <div className="mt-5 panel p-5" style={{ borderLeft: '4px solid var(--crisis)', background: 'rgba(220,38,38,0.04)' }}>
+        <div className="mt-5 panel p-5" style={{ borderLeft: '4px solid var(--crisis)', background: 'rgba(240,77,77,0.08)' }}>
           <div className="eyebrow mb-2" style={{ color: 'var(--crisis)' }}>The CSCO's question</div>
           <p className="font-display text-2xl leading-tight" style={{ color: 'var(--text)' }}>
             "{s.question}"
@@ -60,7 +60,7 @@ export default function ScenarioPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-10">
-        <div className="lg:col-span-2 panel-deep p-5 relative overflow-hidden">
+        <div className="lg:col-span-2 panel p-5 relative overflow-hidden">
           <div className="absolute inset-0 grid-overlay opacity-30 pointer-events-none" />
           <div className="relative">
             <div className="flex items-center justify-between mb-3">
@@ -129,12 +129,12 @@ export default function ScenarioPage() {
 }
 
 const STEPS = [
-  { title: 'Discovery',           who: 'Explorer',     tools: 'status, search',         color: '#0073EA' },
-  { title: 'Schema Understanding', who: 'Summary',      tools: 'describe, lineage',      color: '#b45309' },
-  { title: 'Data Inspection',      who: 'Worker',       tools: 'warehouse, dbt_show',    color: '#be185d' },
-  { title: 'Model Creation',       who: 'Worker',       tools: 'file edits, model gen',  color: '#be185d' },
-  { title: 'Test Authoring',       who: 'Verification', tools: 'describe, dbt_show',     color: '#15803d' },
-  { title: 'Materialization',      who: 'Worker + Ver', tools: 'dbt_run, lineage',       color: '#15803d' },
+  { title: 'Discovery',           who: 'Explorer',     tools: 'status, search',         color: 'var(--agent-explorer)' },
+  { title: 'Schema Understanding', who: 'Summary',      tools: 'describe, lineage',      color: 'var(--agent-summary)' },
+  { title: 'Data Inspection',      who: 'Worker',       tools: 'warehouse, dbt_show',    color: 'var(--agent-worker)' },
+  { title: 'Model Creation',       who: 'Worker',       tools: 'file edits, model gen',  color: 'var(--agent-worker)' },
+  { title: 'Test Authoring',       who: 'Verification', tools: 'describe, dbt_show',     color: 'var(--agent-verification)' },
+  { title: 'Materialization',      who: 'Worker + Ver', tools: 'dbt_run, lineage',       color: 'var(--agent-verification)' },
 ];
 
 function KpiTile({ label, value, unit, tone }: { label: string; value: string; unit: string; tone: string }) {

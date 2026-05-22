@@ -1,58 +1,70 @@
 @import "tailwindcss";
 
 /*
- * The ODI Build Room — Fivetran corporate light theme.
+ * The ODI Build Room — engineering war-room aesthetic.
  *
- * Paper white background, Fivetran near-black ink, Fivetran blue for primary
- * accents, red reserved for urgency (the gap, the S&OP deadline, the missing
- * metric), four sub-agent colors for the dbt-wizard sub-agents that build the
- * new gold model live. Inter throughout. Engineering blueprint, not a NOC.
+ * Deep navy surface, blueprint grid overlay, Fraunces display + IBM Plex Sans
+ * body + Fragment Mono terminals. Fivetran blue for primary; amber for warnings;
+ * crisis-red for urgency; resolved-green for success. Ops-room, not a startup landing page.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  /* Core surfaces — paper-first */
-  --ink:           #ffffff;
-  --ink-deep:      #fafaf5;
-  --ink-elev:      #ffffff;
-  --ink-elev-2:    #f4f5f7;
-  --paper:         #ffffff;
-  --paper-deep:    #fafaf5;
-  --paper-code:    #fbfbf4;
+  /* ---- Surfaces ---- */
+  --surface-0:     #0a0e18;   /* page background — deep navy */
+  --surface-1:     #0f1525;   /* panel base */
+  --surface-2:     #141b30;   /* elevated panel */
+  --surface-3:     #1a2340;   /* hover / selected state */
+  --surface-code:  #080d18;   /* code block background */
 
-  /* Hairlines */
-  --line:          #e7eaee;
-  --line-bright:   #cfd4dc;
-  --line-soft:     #eef0f3;
+  /* ---- Hairlines ---- */
+  --line:          rgba(100, 130, 200, 0.18);
+  --line-bright:   rgba(100, 130, 200, 0.35);
+  --line-soft:     rgba(100, 130, 200, 0.10);
 
-  /* Type — Fivetran near-black + slate muted */
-  --text:          #0F1419;
-  --text-muted:    #5b6770;
-  --text-soft:     #8a93a0;
-  --text-dim:      #aeb6c0;
+  /* ---- Type ---- */
+  --text:          #e8edf8;
+  --text-muted:    #8fa3c8;
+  --text-soft:     #5a7099;
+  --text-dim:      #38506e;
 
-  /* Signal palette — red for urgency, green for resolved */
-  --crisis:        #DC2626;
-  --crisis-bright: #DC2626;
-  --crisis-glow:   rgba(220, 38, 38, 0.18);
-  --alert:         #b45309;
-  --alert-bright:  #b45309;
-  --alert-glow:    rgba(180, 83, 9, 0.18);
-  --resolved:      #15803d;
-  --resolved-bright: #15803d;
-  --resolved-glow: rgba(21, 128, 61, 0.18);
-  --system:        #0073EA;
-  --system-bright: #0073EA;
-  --system-glow:   rgba(0, 115, 234, 0.18);
+  /* ---- Primary — Fivetran blue ---- */
+  --system:        #3b9eff;
+  --system-bright: #5bb3ff;
+  --system-glow:   rgba(59, 158, 255, 0.20);
 
-  /* Sub-agent colors — dbt-wizard quartet */
-  --agent-explorer:     #0073EA;   /* Fivetran blue */
-  --agent-summary:      #b45309;   /* warm amber */
-  --agent-worker:       #be185d;   /* deep magenta */
-  --agent-verification: #15803d;   /* forest green */
+  /* ---- Signal palette ---- */
+  --crisis:        #f04d4d;
+  --crisis-bright: #ff6060;
+  --crisis-glow:   rgba(240, 77, 77, 0.22);
+  --alert:         #f59e0b;
+  --alert-bright:  #fbbf24;
+  --alert-glow:    rgba(245, 158, 11, 0.20);
+  --resolved:      #22c55e;
+  --resolved-bright: #4ade80;
+  --resolved-glow: rgba(34, 197, 94, 0.20);
+
+  /* ---- Sub-agent colors ---- */
+  --agent-explorer:     #3b9eff;
+  --agent-summary:      #f59e0b;
+  --agent-worker:       #e879b8;
+  --agent-verification: #22c55e;
+
+  /* ---- Blueprint grid accent ---- */
+  --grid-dot:      rgba(59, 158, 255, 0.12);
+  --grid-major:    rgba(59, 158, 255, 0.06);
+
+  /* Legacy aliases kept for compatibility */
+  --ink:           var(--surface-0);
+  --ink-deep:      var(--surface-1);
+  --ink-elev:      var(--surface-2);
+  --ink-elev-2:    var(--surface-3);
+  --paper:         var(--surface-1);
+  --paper-deep:    var(--surface-0);
+  --paper-code:    var(--surface-code);
 }
 
 html, body, #root {
@@ -61,20 +73,40 @@ html, body, #root {
 
 body {
   margin: 0;
-  background: var(--ink);
+  background: var(--surface-0);
   color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* ---- Page-level blueprint grid ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    radial-gradient(circle, var(--grid-dot) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 20px 20px;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
 /* ============= TYPE SYSTEM ============= */
 .font-display {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
 }
 .font-mono {
   font-family: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, monospace;
@@ -83,26 +115,26 @@ body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-soft);
 }
 
 :focus-visible {
-  outline: 2px solid rgba(0, 115, 234, 0.5);
+  outline: 2px solid rgba(59, 158, 255, 0.5);
   outline-offset: 3px;
 }
 
 /* ============= LAYOUT PRIMITIVES ============= */
 .panel {
-  background: var(--ink-elev);
+  background: var(--surface-1);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .panel-deep {
-  background: var(--ink-deep);
+  background: var(--surface-0);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 .hairline {
   border-color: var(--line);
@@ -119,30 +151,30 @@ body {
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  border-radius: 4px;
+  border-radius: 3px;
   border: 1px solid currentColor;
 }
-.chip-crisis    { color: var(--crisis);   background: rgba(220, 38, 38, 0.08); }
-.chip-alert     { color: var(--alert);    background: rgba(180, 83, 9, 0.08); }
-.chip-resolved  { color: var(--resolved); background: rgba(21, 128, 61, 0.08); }
-.chip-system    { color: var(--system);   background: rgba(0, 115, 234, 0.08); }
+.chip-crisis    { color: var(--crisis);   background: rgba(240, 77, 77, 0.10); }
+.chip-alert     { color: var(--alert);    background: rgba(245, 158, 11, 0.10); }
+.chip-resolved  { color: var(--resolved); background: rgba(34, 197, 94, 0.10); }
+.chip-system    { color: var(--system);   background: rgba(59, 158, 255, 0.10); }
 
 /* ============= GLOW + PULSE ============= */
-.glow-crisis    { box-shadow: 0 0 0 1px var(--crisis), 0 8px 24px var(--crisis-glow); }
-.glow-alert     { box-shadow: 0 0 0 1px var(--alert),  0 8px 24px var(--alert-glow); }
-.glow-resolved  { box-shadow: 0 0 0 1px var(--resolved), 0 8px 24px var(--resolved-glow); }
-.glow-system    { box-shadow: 0 0 0 1px var(--system), 0 8px 24px var(--system-glow); }
+.glow-crisis    { box-shadow: 0 0 0 1px var(--crisis),   0 8px 32px var(--crisis-glow); }
+.glow-alert     { box-shadow: 0 0 0 1px var(--alert),    0 8px 32px var(--alert-glow); }
+.glow-resolved  { box-shadow: 0 0 0 1px var(--resolved), 0 8px 32px var(--resolved-glow); }
+.glow-system    { box-shadow: 0 0 0 1px var(--system),   0 8px 32px var(--system-glow); }
 
 @keyframes signal-pulse {
   0%, 100% { opacity: 1; }
-  50%      { opacity: 0.35; }
+  50%      { opacity: 0.30; }
 }
 .pulse-dot {
   display: inline-block;
-  height: 8px;
-  width: 8px;
+  height: 7px;
+  width: 7px;
   border-radius: 999px;
-  animation: signal-pulse 1.6s ease-in-out infinite;
+  animation: signal-pulse 1.8s ease-in-out infinite;
 }
 
 /* ============= AGENT AVATAR ============= */
@@ -153,8 +185,8 @@ body {
   justify-content: center;
   height: 40px;
   width: 40px;
-  border-radius: 6px;
-  background: #ffffff;
+  border-radius: 4px;
+  background: var(--surface-2);
   border: 1px solid var(--line);
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 700;
@@ -165,7 +197,7 @@ body {
 }
 .agent-avatar.active {
   border-color: currentColor;
-  box-shadow: 0 0 0 2px currentColor, 0 0 0 4px rgba(15, 20, 25, 0.04);
+  box-shadow: 0 0 0 2px currentColor, 0 0 16px currentColor;
 }
 
 /* ============= CHAT THREAD ============= */
@@ -186,7 +218,7 @@ body {
   content: '▌';
   display: inline-block;
   margin-left: 2px;
-  color: currentColor;
+  color: var(--system);
   animation: cursor-blink 0.9s steps(2, start) infinite;
 }
 @keyframes cursor-blink {
@@ -198,10 +230,10 @@ body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12.5px;
   line-height: 1.55;
-  background: var(--paper-code);
+  background: var(--surface-code);
   color: var(--text);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 4px;
   white-space: pre;
   tab-size: 2;
 }
@@ -210,13 +242,14 @@ body {
   color: var(--system);
   animation: cursor-blink 0.9s steps(2, start) infinite;
 }
-.tok-kw    { color: #0058B0; font-weight: 600; }
-.tok-fn    { color: #0058B0; }
-.tok-str   { color: #15803d; }
-.tok-com   { color: #64748b; font-style: italic; }
-.tok-num   { color: #b45309; }
-.tok-jinja { color: #be185d; font-weight: 600; }
-.tok-tbl   { color: #0F1419; font-weight: 600; }
+/* Dark-adapted syntax colors */
+.tok-kw    { color: #79b8ff; font-weight: 600; }
+.tok-fn    { color: #79b8ff; }
+.tok-str   { color: #4ade80; }
+.tok-com   { color: #5a7099; font-style: italic; }
+.tok-num   { color: #f59e0b; }
+.tok-jinja { color: #e879b8; font-weight: 600; }
+.tok-tbl   { color: var(--text); font-weight: 600; }
 
 /* ============= BUTTONS ============= */
 .btn {
@@ -224,82 +257,106 @@ body {
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
   font-weight: 600;
   font-size: 13px;
   letter-spacing: 0.02em;
-  border-radius: 6px;
-  border: 1px solid var(--text);
-  background: #ffffff;
+  border-radius: 4px;
+  border: 1px solid var(--line-bright);
+  background: var(--surface-2);
   color: var(--text);
   cursor: pointer;
   transition: all 150ms ease;
 }
 .btn:hover {
-  background: var(--text);
-  color: #ffffff;
+  background: var(--surface-3);
+  border-color: var(--system);
+  color: var(--text);
 }
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 .btn-crisis {
-  background: var(--crisis);
+  background: rgba(240, 77, 77, 0.15);
   border-color: var(--crisis);
-  color: #ffffff;
+  color: var(--crisis-bright);
 }
 .btn-crisis:hover {
-  background: #B91C1C;
-  border-color: #B91C1C;
-  color: #ffffff;
-  box-shadow: 0 8px 20px var(--crisis-glow);
+  background: rgba(240, 77, 77, 0.25);
+  box-shadow: 0 4px 20px var(--crisis-glow);
+  color: var(--crisis-bright);
 }
 .btn-resolved {
-  background: var(--resolved);
+  background: rgba(34, 197, 94, 0.12);
   border-color: var(--resolved);
-  color: #ffffff;
+  color: var(--resolved-bright);
 }
 .btn-resolved:hover {
-  background: #166534;
-  border-color: #166534;
-  color: #ffffff;
-  box-shadow: 0 8px 20px var(--resolved-glow);
+  background: rgba(34, 197, 94, 0.22);
+  box-shadow: 0 4px 20px var(--resolved-glow);
+  color: var(--resolved-bright);
 }
 .btn-primary {
-  background: var(--system);
+  background: rgba(59, 158, 255, 0.15);
   border-color: var(--system);
-  color: #ffffff;
+  color: var(--system-bright);
 }
 .btn-primary:hover {
-  background: #0058B0;
-  border-color: #0058B0;
-  color: #ffffff;
-  box-shadow: 0 8px 20px var(--system-glow);
+  background: rgba(59, 158, 255, 0.25);
+  box-shadow: 0 4px 20px var(--system-glow);
+  color: var(--system-bright);
 }
 
 /* ============= BACKGROUNDS ============= */
 .grid-overlay {
   background-image:
-    radial-gradient(circle, rgba(0, 115, 234, 0.10) 1px, transparent 1px);
-  background-size: 24px 24px;
+    radial-gradient(circle, rgba(59, 158, 255, 0.12) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-/* ============= LINKS / NAV ============= */
+/* Atmospheric hero glow for sections */
+.hero-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(ellipse at center top, rgba(59, 158, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ============= NAV LINKS ============= */
 .nav-link {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 13px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--text-muted);
-  padding: 6px 12px;
-  border-radius: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  padding: 5px 10px;
+  border-radius: 3px;
   transition: color 150ms ease, background 150ms ease;
 }
-.nav-link:hover { color: var(--text); background: rgba(0, 115, 234, 0.06); }
-.nav-link.active { color: var(--system); background: rgba(0, 115, 234, 0.10); }
+.nav-link:hover { color: var(--text); background: rgba(59, 158, 255, 0.08); }
+.nav-link.active { color: var(--system-bright); background: rgba(59, 158, 255, 0.12); }
 
 /* ============= FORM RESETS ============= */
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 * { box-sizing: border-box; }
+
+/* ============= PAGE ENTRY ANIMATION ============= */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: fade-up 0.45s ease both;
+}
+.animate-in-d1 { animation-delay: 0.05s; }
+.animate-in-d2 { animation-delay: 0.12s; }
+.animate-in-d3 { animation-delay: 0.20s; }
+.animate-in-d4 { animation-delay: 0.30s; }

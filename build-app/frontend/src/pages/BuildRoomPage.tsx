@@ -197,7 +197,7 @@ export default function BuildRoomPage() {
             return (
               <div key={s.label} className="panel p-2.5 relative" style={{
                 borderLeft: `3px solid ${active ? 'var(--system)' : done ? 'var(--resolved)' : 'var(--line)'}`,
-                background: active ? 'rgba(0,115,234,0.05)' : done ? 'rgba(21,128,61,0.04)' : '#ffffff'
+                background: active ? 'rgba(59,158,255,0.08)' : done ? 'rgba(34,197,94,0.06)' : 'var(--surface-1)'
               }}>
                 <div className="font-mono text-[10px]" style={{ color: active ? 'var(--system)' : done ? 'var(--resolved)' : 'var(--text-soft)' }}>
                   STEP {String(num).padStart(2, '0')} · {done ? 'DONE' : active ? 'NOW' : 'WAITING'}
@@ -229,12 +229,12 @@ export default function BuildRoomPage() {
             </div>
           </header>
 
-          <div className="px-5 py-4 max-h-[68vh] overflow-y-auto" style={{ background: 'var(--paper-deep)' }}>
+          <div className="px-5 py-4 max-h-[68vh] overflow-y-auto" style={{ background: 'var(--surface-0)' }}>
             {visibleNarr.map((m, idx) => {
               const a = agentById[m.e.from];
               const color = a?.color ?? '#0073EA';
               return (
-                <div key={idx} className="chat-row flex gap-3" style={{ borderLeft: `3px solid ${color}`, paddingLeft: 12, background: '#ffffff', borderTopRightRadius: 6, borderBottomRightRadius: 6, marginBottom: 8, borderTop: '1px solid var(--line-soft)', borderRight: '1px solid var(--line-soft)', borderBottom: '1px solid var(--line-soft)' }}>
+                <div key={idx} className="chat-row flex gap-3" style={{ borderLeft: `3px solid ${color}`, paddingLeft: 12, background: 'var(--surface-1)', borderTopRightRadius: 4, borderBottomRightRadius: 4, marginBottom: 8, borderTop: '1px solid var(--line-soft)', borderRight: '1px solid var(--line-soft)', borderBottom: '1px solid var(--line-soft)' }}>
                   <div style={{ color }} className="pt-3 pl-1">
                     <AgentAvatar agent={a} active={m.isCurrent && playing} size={36} />
                   </div>
@@ -328,7 +328,7 @@ export default function BuildRoomPage() {
 
       {/* Build complete badge */}
       {complete && (
-        <div className="mt-6 panel p-6 relative overflow-hidden" style={{ borderLeft: '5px solid var(--resolved)', background: 'rgba(21,128,61,0.05)' }}>
+        <div className="mt-6 panel p-6 relative overflow-hidden" style={{ borderLeft: '5px solid var(--resolved)', background: 'rgba(34,197,94,0.06)' }}>
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-center">
             <div className="lg:col-span-1">
               <div className="chip chip-resolved mb-2">Build Complete</div>

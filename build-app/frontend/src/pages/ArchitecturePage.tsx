@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { dataUrl } from '../types';
 
 interface IcebergTable { name: string; rows: number; partition: string; owner: string }
-interface PipelineConnector { name: string; type: string; owner: string; freq: string; rows_per_day: number; destination: string }
+interface PipelineConnector { name: string; type: string; owner: string; freq: string; rows_per_day: number; destination: string; fivetran_id: string; fivetran_url: string }
 
 export default function ArchitecturePage() {
   const [tables, setTables] = useState<IcebergTable[]>([]);
@@ -27,7 +27,7 @@ export default function ArchitecturePage() {
         </p>
       </header>
 
-      <section className="panel-deep p-6 mb-12 relative overflow-hidden">
+      <section className="panel p-6 mb-12 relative overflow-hidden">
         <div className="absolute inset-0 grid-overlay opacity-20 pointer-events-none" />
         <div className="relative grid grid-cols-1 lg:grid-cols-6 gap-4 items-stretch">
           <div className="lg:col-span-1">
@@ -91,7 +91,7 @@ export default function ArchitecturePage() {
               {AGENT_BOXES.map(a => (
                 <div key={a.name} className="panel p-3" style={{ borderLeft: `4px solid ${a.color}` }}>
                   <div className="font-display text-sm" style={{ color: a.color }}>{a.name}</div>
-                  <div className="text-[10px] font-mono mt-1" style={{ color: 'var(--text-muted)' }}>{a.tables}</div>
+                  <div className="text-[10px] font-mono mt-1" style={{ color: 'var(--text-muted)' }}>{a.role}</div>
                 </div>
               ))}
             </div>
@@ -99,7 +99,7 @@ export default function ArchitecturePage() {
         </div>
       </section>
 
-      <section className="mb-12 panel p-6" style={{ borderLeft: '5px solid var(--system)', background: 'var(--paper-deep)' }}>
+      <section className="mb-12 panel p-6" style={{ borderLeft: '5px solid var(--system)', background: 'rgba(59,158,255,0.06)' }}>
         <div className="eyebrow mb-2" style={{ color: 'var(--system)' }}>The build-time / run-time loop</div>
         <p className="text-base sm:text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
           <strong>dbt-wizard</strong> is the build-time companion to Snowflake's Cortex. Cortex acts on what
@@ -111,12 +111,24 @@ export default function ArchitecturePage() {
       </section>
 
       <section className="mb-12">
-        <h2 className="font-display text-2xl mb-4 border-b pb-2" style={{ color: 'var(--text)', borderColor: 'var(--line)' }}>Fivetran connectors</h2>
+        <div className="flex items-center justify-between mb-4 border-b pb-2" style={{ borderColor: 'var(--line)' }}>
+          <h2 className="font-display text-2xl" style={{ color: 'var(--text)' }}>Fivetran connectors</h2>
+          <a
+            href="https://fivetran.com/dashboard/connectors"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-primary"
+            style={{ fontSize: 12, padding: '6px 14px' }}
+          >
+            Open in Fivetran
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+        </div>
         <div className="panel overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr style={{ background: 'var(--paper-deep)' }}>
-                {['Source', 'Type', 'Cadence', 'Rows / day', 'Destination'].map(h => (
+                {['Source', 'Connector ID', 'Type', 'Cadence', 'Rows / day', 'Destination', ''].map(h => (
                   <th key={h} className="text-left px-4 py-2 eyebrow border-b" style={{ borderColor: 'var(--line)' }}>{h}</th>
                 ))}
               </tr>
@@ -125,10 +137,25 @@ export default function ArchitecturePage() {
               {connectors.map(c => (
                 <tr key={c.name} style={{ borderBottom: '1px solid var(--line-soft)' }}>
                   <td className="px-4 py-3 font-semibold" style={{ color: 'var(--text)' }}>{c.name}</td>
+                  <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>{c.fivetran_id}</td>
                   <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>{c.type}</td>
                   <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>{c.freq}</td>
                   <td className="px-4 py-3 font-mono text-xs text-right tabular-nums" style={{ color: 'var(--text)' }}>{c.rows_per_day.toLocaleString()}</td>
                   <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>{c.destination}</td>
+                  <td className="px-4 py-3">
+                    <a
+                      href={c.fivetran_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded transition-colors"
+                      style={{ color: 'var(--system)', background: 'rgba(0,115,234,0.08)', border: '1px solid rgba(0,115,234,0.35)' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,115,234,0.18)'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,115,234,0.08)'; }}
+                    >
+                      Open
+                      <svg viewBox="0 0 24 24" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                    </a>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -178,8 +205,8 @@ const SOURCES = [
 ];
 
 const AGENT_BOXES = [
-  { name: 'Demand-Sensing',  color: '#0073EA', tables: 'pos_hourly · phantom_oos_by_cluster' },
-  { name: 'Procurement',     color: '#b45309', tables: 'plant_inventory · dc_inventory' },
-  { name: 'Trade-Promo',     color: '#be185d', tables: 'promo_calendar · phantom_oos_by_cluster' },
-  { name: 'Transportation',  color: '#15803d', tables: 'carrier_otd · lane_rates' },
+  { name: 'Demand-Sensing',  color: '#0073EA', role: 'POS signal + OOS detection' },
+  { name: 'Procurement',     color: '#b45309', role: 'Inventory + replenishment' },
+  { name: 'Trade-Promo',     color: '#be185d', role: 'Promo calendar + compliance' },
+  { name: 'Transportation',  color: '#15803d', role: 'Carrier OTD + lane rates' },
 ];

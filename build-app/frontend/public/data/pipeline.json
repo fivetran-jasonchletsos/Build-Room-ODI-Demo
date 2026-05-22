@@ -1,11 +1,11 @@
 {
   "connectors": [
-    { "name": "Walmart Retail Link",      "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 4200000, "destination": "bronze.retail_link" },
-    { "name": "Amazon Vendor Central",    "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 1800000, "destination": "bronze.amazon_vc" },
-    { "name": "Target Partners Online",   "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 1400000, "destination": "bronze.target_pol" },
-    { "name": "Kroger Vendor Portal",     "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 1100000, "destination": "bronze.kroger_vp" },
-    { "name": "Manhattan WMS",            "type": "Replenishment",       "owner": "Cardinal Provisions", "freq": "15-min", "rows_per_day": 920000,  "destination": "bronze.manhattan" },
-    { "name": "Trade-Promo Calendar",     "type": "Promo SoR",           "owner": "Cardinal Provisions", "freq": "hourly", "rows_per_day": 12400,   "destination": "bronze.promo" },
-    { "name": "Store Master (SAP HRP)",   "type": "Reference master",    "owner": "Cardinal Provisions", "freq": "daily",  "rows_per_day": 18200,   "destination": "bronze.store_master" }
+    { "name": "Walmart Retail Link",      "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly",  "rows_per_day": 4200000, "destination": "bronze.retail_link",  "fivetran_id": "walmart_retail_link_prod",     "fivetran_url": "https://fivetran.com/dashboard/connectors/walmart_retail_link_prod" },
+    { "name": "Amazon Vendor Central",    "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly",  "rows_per_day": 1800000, "destination": "bronze.amazon_vc",    "fivetran_id": "amazon_vendor_central_prod",   "fivetran_url": "https://fivetran.com/dashboard/connectors/amazon_vendor_central_prod" },
+    { "name": "Target Partners Online",   "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly",  "rows_per_day": 1400000, "destination": "bronze.target_pol",   "fivetran_id": "target_partners_online_prod",  "fivetran_url": "https://fivetran.com/dashboard/connectors/target_partners_online_prod" },
+    { "name": "Kroger Vendor Portal",     "type": "Retail POS",          "owner": "Cardinal Provisions", "freq": "hourly",  "rows_per_day": 1100000, "destination": "bronze.kroger_vp",    "fivetran_id": "kroger_vendor_portal_prod",    "fivetran_url": "https://fivetran.com/dashboard/connectors/kroger_vendor_portal_prod" },
+    { "name": "Manhattan WMS",            "type": "Replenishment",       "owner": "Cardinal Provisions", "freq": "15-min",  "rows_per_day": 920000,  "destination": "bronze.manhattan",    "fivetran_id": "manhattan_wms_prod",            "fivetran_url": "https://fivetran.com/dashboard/connectors/manhattan_wms_prod" },
+    { "name": "Trade-Promo Calendar",     "type": "Promo SoR",           "owner": "Cardinal Provisions", "freq": "hourly",  "rows_per_day": 12400,   "destination": "bronze.promo",        "fivetran_id": "trade_promo_calendar_prod",     "fivetran_url": "https://fivetran.com/dashboard/connectors/trade_promo_calendar_prod" },
+    { "name": "Store Master (SAP HRP)",   "type": "Reference master",    "owner": "Cardinal Provisions", "freq": "daily",   "rows_per_day": 18200,   "destination": "bronze.store_master", "fivetran_id": "store_master_sap_hrp_prod",     "fivetran_url": "https://fivetran.com/dashboard/connectors/store_master_sap_hrp_prod" }
   ]
 }
