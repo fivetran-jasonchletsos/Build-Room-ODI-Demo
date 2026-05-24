@@ -35,12 +35,12 @@ const PILLARS: Pillar[] = [
     inBuild: 'The CSCO asks a follow-up question with no gold model behind it. dbt-wizard\'s Explorer runs status and search, Summary runs describe and lineage, Worker runs warehouse and dbt_show then authors the SQL, Verification writes the YAML and runs the tests. Eighty-seven seconds end-to-end.',
   },
   {
-    layer: 'Compute over Iceberg',
-    vendor: 'Snowflake',
+    layer: 'Multi-engine reads',
+    vendor: 'Snowflake / Athena / Trino',
     accent: '#29B5E8',
     tag: 'engine',
-    what: 'Reads Iceberg tables directly via external tables and Polaris catalog. Runs the dbt-wizard warehouse for dbt_show and the materialization step. Independently scaled micro-warehouses.',
-    inBuild: 'Worker spins up an XS warehouse for the dbt_show slice, validates the proposed grain, then materializes the new table to the gold prefix. Total compute footprint: a few seconds of XS warehouse time.',
+    what: 'All three read the same Iceberg bytes via external catalogs — Snowflake external tables and Open Catalog, Athena over Glue, Trino over the Iceberg connector. No copies. No extracts. Any engine in the read pool sees the same gold tables.',
+    inBuild: 'Snowflake runs the dbt-wizard warehouse for dbt_show and the materialization step — Worker spins up an XS warehouse for a few seconds. Athena and Trino can query gold.phantom_oos_by_cluster the moment it lands, side by side with Snowflake.',
   },
   {
     layer: 'Run-time Agents',
@@ -179,12 +179,17 @@ export default function OdiDbtWizardPage() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           <div className="eyebrow mb-3">Section 04 · The loop, in one sentence</div>
           <p className="font-display text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight" style={{ color: 'var(--text)' }}>
-            <span style={{ color: '#0073EA' }}>Fivetran lands it.</span>{' '}
-            <span style={{ color: '#FF694A' }}>dbt governs it.</span>{' '}
-            <span style={{ color: '#FF694A' }}>dbt-wizard authors it.</span>{' '}
-            <span style={{ color: '#7C3AED' }}>Iceberg owns it.</span>{' '}
-            <span style={{ color: '#29B5E8' }}>Snowflake reads it.</span>{' '}
-            <span style={{ color: '#DB2777' }}>Cortex acts on it.</span>
+            <span style={{ color: 'var(--text-soft)' }}>Source →</span>{' '}
+            <span style={{ color: '#0073EA' }}>Fivetran →</span>{' '}
+            <span style={{ color: '#7C3AED' }}>Iceberg (MDLS) →</span>{' '}
+            <span style={{ color: '#29B5E8' }}>Snowflake / Athena / Trino →</span>{' '}
+            <span style={{ color: '#FF694A' }}>dbt Labs →</span>{' '}
+            <span style={{ color: 'var(--text)' }}>React.</span>
+          </p>
+          <p className="mt-6 max-w-4xl text-base sm:text-lg leading-relaxed font-mono" style={{ color: 'var(--text-muted)' }}>
+            One copy of the bytes in Iceberg. Snowflake, Athena, and Trino read the same files via external
+            catalogs. Fivetran Transformations triggers dbt Labs the moment the source sync finishes. bronze
+            → silver → gold stays in Iceberg.
           </p>
           <p className="mt-8 max-w-4xl text-lg sm:text-xl leading-relaxed" style={{ color: 'var(--text-muted)' }}>
             Build-time AI and run-time AI on the same lake. The Build Room next door shows it live.

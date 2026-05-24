@@ -21,17 +21,18 @@ export default function ArchitecturePage() {
           Build-time AI and run-time AI on the same lake.
         </h1>
         <p className="mt-3 max-w-3xl leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-          The same Iceberg files that dbt builds are the ones Snowflake reads and the ones every Cortex agent
-          queries. dbt-wizard sits inside dbt Labs and authors new models into the same medallion. No copies.
-          No exports. No drift.
+          Fivetran lands every CDC row into Iceberg (MDLS) on S3 in open Apache Iceberg format — one copy of
+          the bytes. Snowflake, Athena, and Trino all read the same Iceberg files via external catalogs. No
+          copies. No extracts. No drift. Fivetran Transformations triggers dbt Labs the moment the source sync
+          finishes, and the bronze → silver → gold medallion stays in Iceberg the whole way.
         </p>
       </header>
 
       <section className="panel p-6 mb-12 relative overflow-hidden">
         <div className="absolute inset-0 grid-overlay opacity-20 pointer-events-none" />
-        <div className="relative grid grid-cols-1 lg:grid-cols-6 gap-4 items-stretch">
-          <div className="lg:col-span-1">
-            <div className="eyebrow mb-3">Source systems</div>
+        <div className="relative grid grid-cols-1 lg:grid-cols-11 gap-3 items-stretch">
+          <div className="lg:col-span-2">
+            <div className="eyebrow mb-3">Sources</div>
             <div className="space-y-2">
               {SOURCES.map(s => (
                 <div key={s} className="panel px-3 py-2 text-xs font-mono" style={{ color: 'var(--text)' }}>
@@ -43,58 +44,86 @@ export default function ArchitecturePage() {
 
           <Arrow />
 
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-2">
             <div className="eyebrow mb-3">Ingest</div>
             <div className="panel p-3" style={{ borderLeft: '4px solid var(--system)' }}>
               <div className="font-display text-lg" style={{ color: 'var(--system)' }}>Fivetran</div>
-              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>750+ connectors · MDLS</div>
-              <div className="text-xs font-mono mt-2" style={{ color: 'var(--text-soft)' }}>writes to S3 bucket</div>
+              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>750+ connectors · CDC</div>
+              <div className="text-xs font-mono mt-2" style={{ color: 'var(--text-soft)' }}>writes Iceberg to S3</div>
             </div>
           </div>
 
           <Arrow />
 
-          <div className="lg:col-span-1">
-            <div className="eyebrow mb-3">Lake + Transform</div>
+          <div className="lg:col-span-2">
+            <div className="eyebrow mb-3">Iceberg (MDLS)</div>
+            <div className="panel p-3" style={{ borderLeft: '4px solid #7C3AED' }}>
+              <div className="font-display text-lg" style={{ color: '#7C3AED' }}>Iceberg on S3</div>
+              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>cardinal-odi-lake</div>
+              <div className="text-xs font-mono mt-2" style={{ color: 'var(--text-soft)' }}>one copy of the bytes · bronze/silver/gold</div>
+            </div>
+          </div>
+
+          <Arrow />
+
+          <div className="lg:col-span-2">
+            <div className="eyebrow mb-3">Multi-engine reads</div>
             <div className="space-y-2">
               <div className="panel p-3">
-                <div className="font-display text-lg" style={{ color: 'var(--text)' }}>Iceberg on S3</div>
-                <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>cardinal-odi-lake</div>
+                <div className="font-display text-sm" style={{ color: 'var(--text)' }}>Snowflake</div>
+                <div className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>external catalog</div>
               </div>
+              <div className="panel p-3">
+                <div className="font-display text-sm" style={{ color: 'var(--text)' }}>Athena</div>
+                <div className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>Glue catalog</div>
+              </div>
+              <div className="panel p-3">
+                <div className="font-display text-sm" style={{ color: 'var(--text)' }}>Trino</div>
+                <div className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>same Iceberg files</div>
+              </div>
+            </div>
+          </div>
+
+          <Arrow />
+
+          <div className="lg:col-span-2">
+            <div className="eyebrow mb-3">dbt Labs → React</div>
+            <div className="space-y-2">
               <div className="panel p-3" style={{ borderLeft: '4px solid var(--alert)' }}>
                 <div className="font-display text-lg" style={{ color: 'var(--alert)' }}>dbt Labs</div>
-                <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>medallion · 88 models</div>
+                <div className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>triggered by Fivetran Transformations</div>
               </div>
               <div className="panel p-3" style={{ borderLeft: '4px solid var(--system)' }}>
-                <div className="font-display text-base" style={{ color: 'var(--system)' }}>dbt-wizard</div>
-                <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>build-time sub-agents</div>
+                <div className="font-display text-sm" style={{ color: 'var(--system)' }}>dbt-wizard</div>
+                <div className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>build-time sub-agents</div>
+              </div>
+              <div className="panel p-3">
+                <div className="font-display text-sm" style={{ color: 'var(--text)' }}>React</div>
+                <div className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>this UI · agents read gold</div>
               </div>
             </div>
           </div>
+        </div>
 
-          <Arrow />
-
-          <div className="lg:col-span-1">
-            <div className="eyebrow mb-3">Compute</div>
-            <div className="panel p-3">
-              <div className="font-display text-lg" style={{ color: 'var(--text)' }}>Snowflake</div>
-              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>reads Iceberg directly</div>
-              <div className="text-xs font-mono mt-2" style={{ color: 'var(--text-soft)' }}>runs dbt_show + materialize</div>
-            </div>
+        <div className="relative mt-6 panel p-4" style={{ borderLeft: '3px solid var(--system)', background: 'rgba(0,115,234,0.04)' }}>
+          <div className="eyebrow mb-1" style={{ color: 'var(--system)' }}>Canonical flow</div>
+          <div className="font-mono text-xs sm:text-sm" style={{ color: 'var(--text)' }}>
+            Source → Fivetran → Iceberg (MDLS) → Snowflake / Athena / Trino → dbt Labs → React
           </div>
+          <div className="text-[11px] font-mono mt-2" style={{ color: 'var(--text-muted)' }}>
+            Fivetran Transformations triggers dbt Labs the moment the source sync finishes. bronze → silver → gold stays in Iceberg.
+          </div>
+        </div>
 
-          <Arrow />
-
-          <div className="lg:col-span-1">
-            <div className="eyebrow mb-3">Run-time agents</div>
-            <div className="space-y-2">
-              {AGENT_BOXES.map(a => (
-                <div key={a.name} className="panel p-3" style={{ borderLeft: `4px solid ${a.color}` }}>
-                  <div className="font-display text-sm" style={{ color: a.color }}>{a.name}</div>
-                  <div className="text-[10px] font-mono mt-1" style={{ color: 'var(--text-muted)' }}>{a.role}</div>
-                </div>
-              ))}
-            </div>
+        <div className="relative mt-6">
+          <div className="eyebrow mb-3">Run-time agents · read the same gold Iceberg tables</div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {AGENT_BOXES.map(a => (
+              <div key={a.name} className="panel p-3" style={{ borderLeft: `4px solid ${a.color}` }}>
+                <div className="font-display text-sm" style={{ color: a.color }}>{a.name}</div>
+                <div className="text-[10px] font-mono mt-1" style={{ color: 'var(--text-muted)' }}>{a.role}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

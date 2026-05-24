@@ -127,10 +127,13 @@ export default function Layout() {
             </p>
           </div>
           <div>
-            <div className="eyebrow mb-2">Build-time AI partner</div>
-            <p className="leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-              dbt Labs and dbt-wizard. Sub-agents author SQL, YAML, tests, and lineage entries into the medallion
-              project. Snowflake materializes them onto Iceberg on S3. Cortex reads the result the moment it lands.
+            <div className="eyebrow mb-2">Canonical flow</div>
+            <p className="leading-relaxed font-mono text-[12px]" style={{ color: 'var(--text-muted)' }}>
+              Source → Fivetran → Iceberg (MDLS) → Snowflake / Athena / Trino → dbt Labs → React
+            </p>
+            <p className="leading-relaxed mt-2" style={{ color: 'var(--text-muted)' }}>
+              Fivetran lands one copy of the bytes into Iceberg on S3. Snowflake, Athena, and Trino read the
+              same files. Fivetran Transformations triggers dbt Labs the moment the source sync finishes.
             </p>
           </div>
           <div>

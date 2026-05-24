@@ -9,10 +9,12 @@ export default function AboutPage() {
         </h2>
         <p className="mt-3 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
           <em>"MDS was optimized for humans. ODI is designed for a future with humans and
-          production agents at scale."</em> This demo is one instance of that architecture:
-          Fivetran's 750+ connectors and Managed Data Lake Service (MDLS) land data into open
-          table formats; dbt transformations build the governed semantic layer; multiple compute
-          engines and AI agents read the same gold tables.
+          production agents at scale."</em> This demo is one instance of that architecture, end to end:
+          <strong style={{ color: 'var(--text)' }}> Source → Fivetran → Iceberg (MDLS) → Snowflake / Athena / Trino → dbt Labs → React</strong>.
+          Fivetran lands every CDC row into Iceberg (MDLS) on S3 in open Apache Iceberg format — one copy of the
+          bytes. Snowflake, Athena, and Trino read the same Iceberg files via external catalogs. Fivetran
+          Transformations triggers dbt Labs the moment the source sync finishes, and bronze → silver → gold
+          stays in Iceberg the whole way.
         </p>
         <a
           href="https://fivetran-jasonchletsos.github.io/Fivetran-Demo-Repository/story/"
@@ -76,7 +78,10 @@ export default function AboutPage() {
       </section>
 
       <section className="mb-10">
-        <h2 className="font-display text-2xl border-b pb-2 mb-4" style={{ color: 'var(--text)', borderColor: 'var(--line)' }}>The stack</h2>
+        <h2 className="font-display text-2xl border-b pb-2 mb-4" style={{ color: 'var(--text)', borderColor: 'var(--line)' }}>The build path</h2>
+        <p className="text-sm mb-4 font-mono" style={{ color: 'var(--text-muted)' }}>
+          Source → Fivetran → Iceberg (MDLS) → Snowflake / Athena / Trino → dbt Labs → React
+        </p>
         <div className="panel p-5">
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
             {STACK.map(s => (
@@ -122,13 +127,13 @@ const WHATS_DIFFERENT = [
   },
 ];
 
-const STACK = [
-  { layer: 'Ingest',     name: 'Fivetran',                     note: 'Walmart Retail Link, Amazon Vendor Central, Target Partners Online, Kroger Vendor Portal, Manhattan WMS, Trade-Promo SoR, SAP store master.' },
-  { layer: 'Storage',    name: 'Fivetran MDLS on Amazon S3',   note: 'cardinal-odi-lake bucket. Customer-owned. Bronze, silver, gold prefixes.' },
-  { layer: 'Format',     name: 'Apache Iceberg v2',            note: 'Parquet, ZSTD, Glue + Snowflake Open Catalog. Vendor-neutral.' },
-  { layer: 'Build-time AI', name: 'dbt Labs + dbt-wizard',     note: 'Four sub-agents author models inside the medallion. Tools: status, search, describe, lineage, warehouse, dbt_show, file edits, model generation.' },
-  { layer: 'Transform',  name: 'dbt medallion',                note: 'Bronze, silver, gold. 87 models before this build. 88 after. The new model has the same governance posture as every other one.' },
-  { layer: 'Compute',    name: 'Snowflake',                    note: 'Reads Iceberg directly. Runs the dbt-wizard warehouse for dbt_show. Reads the new gold table the moment it lands.' },
-  { layer: 'Run-time AI', name: 'Snowflake Cortex',            note: 'Crisis Room agents resolve the new gold table on their next pass. Build-time AI feeds run-time AI on the same lake.' },
-  { layer: 'Frontend',   name: 'React 19 + Vite + Tailwind v4', note: 'Static SPA on GitHub Pages. Live SQL build animation is real audience-controllable typewriter.' },
+const STEPS = [
+  { layer: 'Source',           name: 'Cardinal sources',                 note: 'Walmart Retail Link, Amazon Vendor Central, Target Partners Online, Kroger Vendor Portal, Manhattan WMS, Trade-Promo SoR, SAP store master.' },
+  { layer: 'Fivetran',         name: 'Fivetran CDC + Transformations',   note: 'Lands every CDC row into Iceberg (MDLS) on S3 in open Apache Iceberg format. Fivetran Transformations triggers dbt Labs the moment the source sync finishes.' },
+  { layer: 'Iceberg (MDLS)',   name: 'Iceberg on Amazon S3',             note: 'cardinal-odi-lake bucket. Customer-owned. One copy of the bytes. bronze → silver → gold prefixes. Apache Iceberg v2, Parquet, ZSTD. Glue + Snowflake Open Catalog.' },
+  { layer: 'Engines',          name: 'Snowflake / Athena / Trino',       note: 'All three read the same Iceberg bytes via external catalogs. No copies, no extracts. Snowflake runs the dbt-wizard warehouse for dbt_show and materialization; Athena and Trino can query the same gold tables side by side.' },
+  { layer: 'dbt Labs',         name: 'dbt Labs + dbt-wizard',            note: 'Bronze, silver, gold medallion. 87 models before this build, 88 after. dbt-wizard sub-agents author models inside the medallion using the same tools an engineer uses.' },
+  { layer: 'React',            name: 'React 19 + Vite + Tailwind v4',    note: 'Static SPA on GitHub Pages. This UI reads gold Iceberg tables and shows the live dbt-wizard build as an audience-controllable typewriter.' },
 ];
+
+const STACK = STEPS;

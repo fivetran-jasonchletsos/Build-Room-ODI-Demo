@@ -80,6 +80,28 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="eyebrow mb-3">Provenance · the canonical ODI flow</div>
+        <h2 className="font-display text-2xl sm:text-3xl mb-6" style={{ color: 'var(--text)' }}>
+          Source → Fivetran → Iceberg (MDLS) → Snowflake / Athena / Trino → dbt Labs → React
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {PROVENANCE.map((p, i) => (
+            <div key={p.title} className="panel p-4" style={{ borderLeft: `3px solid ${p.color}` }}>
+              <div className="font-mono text-[11px] mb-2" style={{ color: p.color }}>{String(i + 1).padStart(2, '0')} · {p.tag}</div>
+              <div className="font-display text-base mb-1" style={{ color: 'var(--text)' }}>{p.title}</div>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>{p.body}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          One copy of the bytes in Iceberg on S3. Snowflake, Athena, and Trino all read the same files through
+          external catalogs. <strong style={{ color: 'var(--text)' }}>Fivetran Transformations triggers dbt
+          Labs the moment the source sync finishes.</strong> bronze → silver → gold stays in Iceberg the
+          whole way.
+        </p>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="eyebrow mb-3">The six-step build</div>
         <h2 className="font-display text-3xl sm:text-4xl mb-8" style={{ color: 'var(--text)' }}>
@@ -130,6 +152,14 @@ const KPIS = (tMinus: string) => [
   { label: 'Metric requested',       value: 'NEW',     unit: 'phantom OOS by cluster', tone: 'var(--crisis)' },
   { label: 'Upstream models ready',  value: '4 / 4',   unit: 'staging + dim',         tone: 'var(--system)' },
   { label: 'Sub-agents on the job',  value: '4 / 4',   unit: 'all wired',             tone: 'var(--system)' },
+];
+
+const PROVENANCE = [
+  { tag: 'SOURCE',    title: 'Cardinal sources',         body: 'Walmart Retail Link, Amazon Vendor Central, Target, Kroger, Manhattan WMS, SAP store master. Real local source identity preserved.', color: '#64748b' },
+  { tag: 'FIVETRAN',  title: 'Fivetran CDC',             body: 'Lands every CDC row into Iceberg (MDLS) on S3 in open Apache Iceberg format. One copy of the bytes — no extracts.',                color: '#0073EA' },
+  { tag: 'ICEBERG',   title: 'Iceberg (MDLS)',           body: 'cardinal-odi-lake bucket. Customer-owned. bronze → silver → gold all stay in Iceberg. Vendor-neutral table format.',                  color: '#7C3AED' },
+  { tag: 'ENGINES',   title: 'Snowflake / Athena / Trino', body: 'Read the same Iceberg bytes via external catalogs. No copies, no extracts. Any engine can join the read pool.',                    color: '#29B5E8' },
+  { tag: 'DBT → REACT', title: 'dbt Labs + React',       body: 'Fivetran Transformations triggers dbt Labs the moment a source sync finishes. dbt-wizard authors gold; this React app reads it.',   color: '#FF694A' },
 ];
 
 const FLOW = [
