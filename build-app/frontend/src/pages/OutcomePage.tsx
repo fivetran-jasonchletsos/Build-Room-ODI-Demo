@@ -16,7 +16,7 @@ export default function OutcomePage() {
   const [o, setO] = useState<Outcome | null>(null);
 
   useEffect(() => {
-    fetch(dataUrl('outcome.json')).then(r => r.json()).then(setO);
+    fetch(dataUrl('outcome.json')).then(r => { if (!r.ok) throw new Error('outcome.json'); return r.json(); }).then(setO).catch(() => {});
   }, []);
 
   if (!o) return <div className="mx-auto max-w-7xl px-4 py-12 font-mono text-sm" style={{ color: 'var(--text-muted)' }}>Modeling outcome…</div>;

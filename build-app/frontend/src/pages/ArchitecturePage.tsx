@@ -9,8 +9,8 @@ export default function ArchitecturePage() {
   const [connectors, setConnectors] = useState<PipelineConnector[]>([]);
 
   useEffect(() => {
-    fetch(dataUrl('iceberg.json')).then(r => r.json()).then(d => setTables(d.gold_tables));
-    fetch(dataUrl('pipeline.json')).then(r => r.json()).then(d => setConnectors(d.connectors));
+    fetch(dataUrl('iceberg.json')).then(r => { if (!r.ok) throw new Error('iceberg.json'); return r.json(); }).then(d => setTables(d.gold_tables)).catch(() => {});
+    fetch(dataUrl('pipeline.json')).then(r => { if (!r.ok) throw new Error('pipeline.json'); return r.json(); }).then(d => setConnectors(d.connectors)).catch(() => {});
   }, []);
 
   return (

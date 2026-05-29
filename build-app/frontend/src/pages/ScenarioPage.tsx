@@ -8,7 +8,7 @@ export default function ScenarioPage() {
   const [tMinus, setTMinus] = useState('T-13:46:00');
 
   useEffect(() => {
-    fetch(dataUrl('scenario.json')).then(r => r.json()).then(setS);
+    fetch(dataUrl('scenario.json')).then(r => { if (!r.ok) throw new Error('scenario.json'); return r.json(); }).then(setS).catch(() => {});
   }, []);
 
   useEffect(() => {

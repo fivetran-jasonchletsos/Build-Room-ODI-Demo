@@ -7,7 +7,7 @@ export default function AgentsPage() {
   const [agents, setAgents] = useState<Agent[]>([]);
 
   useEffect(() => {
-    fetch(dataUrl('agents.json')).then(r => r.json()).then(d => setAgents(d.agents));
+    fetch(dataUrl('agents.json')).then(r => { if (!r.ok) throw new Error('agents.json'); return r.json(); }).then(d => setAgents(d.agents)).catch(() => {});
   }, []);
 
   return (

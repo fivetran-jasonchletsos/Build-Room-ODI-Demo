@@ -53,14 +53,14 @@ export default function BuildRoomPage() {
   // Load data
   useEffect(() => {
     Promise.all([
-      fetch(dataUrl('agents.json')).then(r => r.json()),
-      fetch(dataUrl('scenario.json')).then(r => r.json()),
-      fetch(dataUrl('build_script.json')).then(r => r.json()),
+      fetch(dataUrl('agents.json')).then(r => { if (!r.ok) throw new Error('agents.json'); return r.json(); }),
+      fetch(dataUrl('scenario.json')).then(r => { if (!r.ok) throw new Error('scenario.json'); return r.json(); }),
+      fetch(dataUrl('build_script.json')).then(r => { if (!r.ok) throw new Error('build_script.json'); return r.json(); }),
     ]).then(([a, s, b]) => {
       setAgents(a.agents);
       setScenario(s);
       setEvents(b.events);
-    });
+    }).catch(() => {});
   }, []);
 
   const agentById = useMemo(() => {
