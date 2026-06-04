@@ -87,7 +87,7 @@
       "from": "verification",
       "step": 5,
       "step_label": "Test Authoring",
-      "body": "Writing the YAML companion. Description first, then the schema contract — every column gets a type so downstream Cortex agents can resolve it without ambiguity.",
+      "body": "Writing the YAML companion. Description first, then the schema contract — every column gets a type so run-time agents can resolve it without ambiguity.",
       "code_target": "yaml",
       "code_append": "version: 2\n\nmodels:\n  - name: phantom_oos_by_cluster\n    description: |\n      Phantom out-of-stock counts and rates rolled up to (region,\n      promotion_overlap_bucket) over the trailing 90 days. Built by\n      dbt-wizard sub-agents on 2026-05-21 in response to CSCO S&OP prep.\n    config:\n      contract:\n        enforced: true\n      tags: [supply_chain, ai_built]\n      meta:\n        owner: supply_chain_analytics\n        built_by: dbt-wizard\n        consumes: [stg_retailer_pos_hourly, int_shelf_compliance_daily, stg_promotion_calendar, dim_store_cluster]\n\n"
     },
@@ -117,8 +117,8 @@
       "from": "verification",
       "step": 6,
       "step_label": "Materialization",
-      "body": "Running lineage one more time. Four upstreams attached. Cortex agents in the Crisis Room can now resolve the new gold table on their next pass. The S&OP question has an asset behind it.",
-      "side_effect": "tool:lineage updated · downstream:cortex_agents notified · 87 models → 88 models"
+      "body": "Running lineage one more time. Four upstreams attached. Run-time agents in the Crisis Room can now resolve the new gold table on their next pass. The S&OP question has an asset behind it.",
+      "side_effect": "tool:lineage updated · downstream:runtime_agents notified · 87 models → 88 models"
     }
   ]
 }

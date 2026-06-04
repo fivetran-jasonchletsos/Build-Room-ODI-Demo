@@ -63,8 +63,8 @@ export default function AboutPage() {
       <section className="mb-10">
         <h2 className="font-display text-2xl border-b pb-2 mb-4" style={{ color: 'var(--text)', borderColor: 'var(--line)' }}>The dbt Labs role in the ODI loop</h2>
         <p className="leading-relaxed text-base mb-4" style={{ color: 'var(--text-muted)' }}>
-          The Crisis Room shows what Cortex does at <em>run-time</em>. The Build Room shows what dbt Labs and
-          dbt-wizard do at <em>build-time</em>. They are the same loop, viewed from opposite ends. Cortex agents
+          The Crisis Room shows what run-time agents do at <em>run-time</em>. The Build Room shows what dbt Labs and
+          dbt-wizard do at <em>build-time</em>. They are the same loop, viewed from opposite ends. Run-time agents
           read the gold layer. dbt-wizard sub-agents author it. Both point at the same Iceberg lake. Neither
           is locked to the other. That is what makes the architecture survive every model swap, every engine
           swap, and every vendor swap that comes next.
@@ -122,8 +122,8 @@ const WHATS_DIFFERENT = [
   },
   {
     tag: 'Open lake',
-    title: 'Cortex reads what dbt-wizard authored.',
-    body: 'The new gold table materializes to Iceberg on S3. The Crisis Room Cortex agents resolve it on their next pass — no copy, no export, no notify-the-team email. The loop is the lake.',
+    title: 'Run-time agents read what dbt-wizard authored.',
+    body: 'The new gold table materializes to Iceberg on S3. The Crisis Room run-time agents resolve it on their next pass — no copy, no export, no notify-the-team email. The loop is the lake.',
   },
 ];
 

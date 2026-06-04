@@ -21,8 +21,8 @@
       { "id": "promo",   "name": "stg_promotion_calendar",   "layer": "staging" },
       { "id": "cluster", "name": "dim_store_cluster",        "layer": "marts/dim" },
       { "id": "gold",    "name": "gold.phantom_oos_by_cluster", "layer": "gold", "built": true, "new": true },
-      { "id": "ds_agent", "name": "Demand-Sensing Cortex Agent",  "layer": "consumer" },
-      { "id": "pr_agent", "name": "Trade-Promo Cortex Agent",      "layer": "consumer" }
+      { "id": "ds_agent", "name": "Demand-Sensing Run-time Agent",  "layer": "consumer" },
+      { "id": "pr_agent", "name": "Trade-Promo Run-time Agent",      "layer": "consumer" }
     ],
     "edges": [
       { "from": "pos",     "to": "gold" },
@@ -49,7 +49,7 @@
       "Data engineer scopes the work Friday morning — too late for S&OP.",
       "Engineer writes SQL from scratch, joining four upstream models by hand.",
       "Tests, YAML, and contract get bolted on at PR time. Sometimes.",
-      "Cortex agents do not see the new asset until the next release cut."
+      "Run-time agents do not see the new asset until the next release cut."
     ]
   },
   "with_wizard": {
@@ -85,6 +85,6 @@
   "hero": {
     "label": "Production-grade dbt model in production-grade time",
     "value": "87 seconds",
-    "note": "From CSCO question to materialized Iceberg gold table — versioned, tested, documented, lineage-tracked, ready for the next Cortex pass."
+    "note": "From CSCO question to materialized Iceberg gold table — versioned, tested, documented, lineage-tracked, ready for the next agent pass."
   }
 }

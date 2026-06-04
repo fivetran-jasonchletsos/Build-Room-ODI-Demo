@@ -39,8 +39,8 @@ export default function PolicyPage() {
       <section className="panel p-6 mb-10" style={{ borderLeft: '5px solid var(--system)', background: 'rgba(59,158,255,0.06)' }}>
         <div className="eyebrow mb-2" style={{ color: 'var(--system)' }}>The loop</div>
         <p className="text-lg leading-relaxed mb-4" style={{ color: 'var(--text)' }}>
-          The new gold table is queryable by Snowflake's Cortex agents the moment it materializes — because
-          both dbt-wizard and Cortex point at the same Iceberg lake. No publishing step. No notification
+          The new gold table is queryable by run-time agents the moment it materializes — because
+          both dbt-wizard and the run-time agents point at the same Iceberg lake. No publishing step. No notification
           email. No second copy. Open standards are what make build-time AI and run-time AI complementary
           instead of competing.
         </p>
@@ -85,8 +85,8 @@ const ARGS = [
   },
   {
     tag: 'Run-time pickup',
-    title: 'Cortex sees the new table the same minute it materializes.',
-    body: 'Because Cortex agents read Iceberg directly via the Open Catalog, the new gold table is queryable the moment dbt-wizard finishes the dbt_run. No publish step. No catalog refresh ticket. The Crisis Room\'s next pass uses the new asset without anyone telling it to.',
+    title: 'Run-time agents see the new table the same minute it materializes.',
+    body: 'Because run-time agents read Iceberg directly via the Open Catalog, the new gold table is queryable the moment dbt-wizard finishes the dbt_run. No publish step. No catalog refresh ticket. The Crisis Room\'s next pass uses the new asset without anyone telling it to.',
   },
   {
     tag: 'Governance',
@@ -98,5 +98,5 @@ const ARGS = [
 const PILLARS = [
   { n: '01', title: 'Customer-owned storage',  body: 'Cardinal owns the bucket. dbt-wizard writes through dbt. Cardinal reads with any engine.', color: 'var(--system)' },
   { n: '02', title: 'Open table format',        body: 'Apache Iceberg v2. ACID, time-travel, schema evolution. The asset survives the tool that built it.', color: 'var(--alert)' },
-  { n: '03', title: 'Build + run on one lake',  body: 'dbt-wizard authors. Cortex consumes. Same Iceberg. Same medallion. Same governance.', color: 'var(--resolved)' },
+  { n: '03', title: 'Build + run on one lake',  body: 'dbt-wizard authors. Run-time agents consume. Same Iceberg. Same medallion. Same governance.', color: 'var(--resolved)' },
 ];

@@ -125,13 +125,13 @@ export default function HomePage() {
         <div className="panel p-6 sm:p-8" style={{ borderLeft: '5px solid var(--system)', background: 'rgba(59,158,255,0.06)' }}>
           <div className="eyebrow mb-2" style={{ color: 'var(--system)' }}>The third apex demo</div>
           <p className="font-display text-2xl sm:text-3xl leading-tight" style={{ color: 'var(--text)' }}>
-            The Crisis Room runs four Cortex agents on existing gold tables.<br />
-            The Brief Room runs Cortex Analyst and Cortex Search in dual modality.<br />
+            The Crisis Room runs four run-time agents on existing gold tables.<br />
+            The Brief Room runs analytical and search agents in dual modality.<br />
             <span style={{ color: 'var(--system)' }}>The Build Room builds the gold table itself.</span>
           </p>
           <p className="mt-4 text-base leading-relaxed max-w-3xl" style={{ color: 'var(--text-muted)' }}>
-            Run-time AI and build-time AI on the same open lake. Cortex acts on what dbt-wizard authors.
-            dbt-wizard authors what Cortex will need next. The loop closes on Iceberg.
+            Run-time AI and build-time AI on the same open lake. Run-time agents act on what dbt-wizard authors.
+            dbt-wizard authors what run-time agents will need next. The loop closes on Iceberg.
           </p>
         </div>
       </section>
@@ -168,5 +168,5 @@ const FLOW = [
   { tag: 'INSPECTION',           title: 'Validate the slice',      body: 'Worker runs dbt_show on a 7-day slice. Confirms the phantom-OOS signal aggregates cleanly.',          who: 'Worker · warehouse, dbt_show', color: '#be185d' },
   { tag: 'MODEL CREATION',       title: 'Author the SQL',          body: 'Worker writes gold.phantom_oos_by_cluster.sql — header, CTEs, joins, and final SELECT.',              who: 'Worker · file edits, model generation', color: '#be185d' },
   { tag: 'TEST AUTHORING',       title: 'Lock the contract',       body: 'Verification writes YAML — schema contract, ownership, six column tests, one combination test.',     who: 'Verification · describe, dbt_show', color: '#15803d' },
-  { tag: 'MATERIALIZATION',      title: 'Land on Iceberg',         body: 'Worker materializes the table. Verification confirms lineage updated and Cortex can read it.',       who: 'Worker + Verification', color: '#15803d' },
+  { tag: 'MATERIALIZATION',      title: 'Land on Iceberg',         body: 'Worker materializes the table. Verification confirms lineage updated and run-time agents can read it.',       who: 'Worker + Verification', color: '#15803d' },
 ];

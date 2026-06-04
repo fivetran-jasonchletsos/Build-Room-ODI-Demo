@@ -131,11 +131,11 @@ export default function ArchitecturePage() {
       <section className="mb-12 panel p-6" style={{ borderLeft: '5px solid var(--system)', background: 'rgba(59,158,255,0.06)' }}>
         <div className="eyebrow mb-2" style={{ color: 'var(--system)' }}>The build-time / run-time loop</div>
         <p className="text-base sm:text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
-          <strong>dbt-wizard</strong> is the build-time companion to Snowflake's Cortex. Cortex acts on what
-          dbt-wizard authors. dbt-wizard authors what Cortex will need next. Both point at the same Iceberg
+          <strong>dbt-wizard</strong> is the build-time layer. Run-time agents act on what
+          dbt-wizard authors. dbt-wizard authors what run-time agents will need next. Both point at the same Iceberg
           lake. Both run governed against the same medallion. Neither is locked to the other. When the CSCO
           asks a question that requires a new model, dbt-wizard builds it in eighty-seven seconds —
-          materialized to the same gold prefix Cortex reads from a minute later.
+          materialized to the same gold prefix run-time agents read from a minute later.
         </p>
       </section>
 

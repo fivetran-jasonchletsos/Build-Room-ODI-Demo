@@ -49,11 +49,11 @@
       "color": "#15803d",
       "role": "Adds dbt tests, schema contract, and ownership. Validates against existing lineage and confirms downstream consumers can read the new asset.",
       "tools": ["describe", "lineage", "dbt_show"],
-      "sample_input": "Add tests covering uniqueness on the cluster key and not-null on the rate column. Confirm Cortex agents can resolve the new gold table in their semantic layer.",
+      "sample_input": "Add tests covering uniqueness on the cluster key and not-null on the rate column. Confirm run-time agents can resolve the new gold table in their semantic layer.",
       "responsibilities": [
         "Writes the YAML companion with description, tests, and schema contract",
         "Confirms uniqueness and not-null tests pass against the materialized slice",
-        "Updates lineage so downstream Cortex agents pick the asset up immediately"
+        "Updates lineage so downstream run-time agents pick the asset up immediately"
       ]
     }
   ]

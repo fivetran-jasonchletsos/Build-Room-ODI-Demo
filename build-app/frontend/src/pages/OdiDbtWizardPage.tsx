@@ -24,7 +24,7 @@ const PILLARS: Pillar[] = [
     accent: '#7C3AED',
     tag: 'storage',
     what: 'Open table format. Customer-owned storage. Snapshot isolation, schema evolution, time travel, multi-engine reads. The bytes belong to the customer, not the engine.',
-    inBuild: 'When dbt-wizard\'s Worker sub-agent materializes the new gold.phantom_oos_by_cluster table, it writes Parquet files into the same S3 prefix the Crisis Room Cortex agents already read from. No second copy. No publish step. Cortex resolves the new asset on its next pass.',
+    inBuild: 'When dbt-wizard\'s Worker sub-agent materializes the new gold.phantom_oos_by_cluster table, it writes Parquet files into the same S3 prefix the Crisis Room run-time agents already read from. No second copy. No publish step. Run-time agents resolve the new asset on their next pass.',
   },
   {
     layer: 'Medallion + Build-time AI',
@@ -44,11 +44,11 @@ const PILLARS: Pillar[] = [
   },
   {
     layer: 'Run-time Agents',
-    vendor: 'Cortex',
+    vendor: 'dbt-wizard run-time',
     accent: '#DB2777',
     tag: 'reasoning',
-    what: 'Cortex Analyst translates natural language to SQL over the gold layer. Cortex Agents orchestrate tool calls and message passing. Cortex Search retrieves unstructured context.',
-    inBuild: 'The moment dbt-wizard\'s Verification sub-agent confirms the materialization, the new gold table is queryable by the Crisis Room\'s four Cortex agents. Build-time AI feeds run-time AI without an integration handoff.',
+    what: 'The dbt-wizard run-time has four sub-agents: Explorer surfaces relevant models, Summary confirms grain and join paths, Worker authors and materializes SQL, Verification writes tests and schema contracts. Humans and agents read the same gold layer.',
+    inBuild: 'The moment dbt-wizard\'s Verification sub-agent confirms the materialization, the new gold table is queryable by the Crisis Room\'s four run-time agents. Build-time AI feeds run-time AI without an integration handoff.',
   },
 ];
 
@@ -72,7 +72,7 @@ const PROPERTIES: Property[] = [
   {
     title: 'Reusability',
     claim: 'The new model is a first-class citizen for every downstream consumer.',
-    proof: 'Cortex agents pick it up on the next pass. BI dashboards can pin to it. Other dbt models can ref() it. Iceberg readers — Snowflake, Trino, Spark, DuckDB — can all query it. The model is not stuck inside the tool that built it.',
+    proof: 'Run-time agents pick it up on the next pass. BI dashboards can pin to it. Other dbt models can ref() it. Iceberg readers — Snowflake, Trino, Spark, DuckDB — can all query it. The model is not stuck inside the tool that built it.',
   },
   {
     title: 'Openness',
@@ -100,7 +100,7 @@ export default function OdiDbtWizardPage() {
             <span style={{ color: 'var(--system)' }}>dbt-wizard builds on it.</span>
           </h1>
           <p className="mt-6 max-w-3xl text-lg sm:text-xl leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-            Cortex is the run-time brain. dbt-wizard is the build-time hands. Both operate on the same open
+            dbt-wizard is the build-time layer. Run-time agents read what it authors. Both operate on the same open
             lake. Both governed by the same medallion. That is the loop.
           </p>
 
@@ -122,7 +122,7 @@ export default function OdiDbtWizardPage() {
         </h2>
         <p className="max-w-3xl text-base sm:text-lg leading-relaxed mb-10" style={{ color: 'var(--text-muted)' }}>
           Each layer has a clear job. Pull dbt-wizard out and the CSCO's follow-up does not get answered in time.
-          Pull Iceberg out and dbt-wizard's output is just text. Pull Cortex out and the new table never gets read.
+          Pull Iceberg out and dbt-wizard's output is just text. Pull the run-time agents out and the new table never gets read.
           The loop only closes when all five hold.
         </p>
 
